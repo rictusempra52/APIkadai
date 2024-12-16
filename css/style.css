@@ -1,0 +1,7 @@
+img {
+    width: 100%;
+}
+
+#analysis_result {
+    white-space: pre-wrap;
+}
