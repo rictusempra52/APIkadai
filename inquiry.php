@@ -29,6 +29,7 @@
                 問い合わせ内容
             </label>
             <textarea name="inquiry" id="inquiry"></textarea>
+            <input type="submit" value="送信">
         </fieldset>
     </form>
 </body>
