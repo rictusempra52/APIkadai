@@ -1,5 +1,6 @@
 <?php
-// var_dump($_POST);
+// タイムゾーンを設定
+date_default_timezone_set('Asia/Tokyo');
 
 // 変数定義
 $roomNo = $_POST["room_no"];
@@ -11,13 +12,14 @@ $writeData = "{$createdAt},{$roomNo},{$inquiry}\n";
 
 var_dump($writeData);
 
-// CSSファイルを作成、更新
+// CSVファイルを作成、更新
 $file = fopen("./data/inquiry.csv", "a");
 saveData($file, $writeData);
 
-header("./inquiry.php");
+header("Location:./inquiry.php");
 exit();
 
+// CSVファイルにデータを書き込む関数
 function saveData($file, $writeData)
 {
     flock($file, LOCK_EX);
