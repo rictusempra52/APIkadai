@@ -6,7 +6,6 @@ import {
     getFirestore,
     collection,
     addDoc,
-    doc,
     getDocs,
     serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
@@ -14,18 +13,25 @@ import {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// DOM
+const notificationDocument = $("#notification_document");
+const preview = document.getElementById("preview");
+const displayResultHistory = document.getElementById("display_result_history");
+const analysisResultText = document.getElementById("analysis_result_text");
+const analysisResultTimestamp = document.getElementById("analysis_result_timestamp");
+
 $(function () {
     // ファイル入力（#notification_document）の変更イベントを監視
-    $("#notification_document").on("change", function () {
+    notificationDocument.on("change", function () {
         // 選択された最初のファイルを取得
         const file = this.files[0];
         const reader = new FileReader();
 
-        // FileReaderの読み込み完了イベントを設定
+        // FileReaderの読み込み完了イベント
         reader.onload = function (e) {
             // 読み込んだファイルを画像プレビューに設定
             // e.target.resultはBase64エンコードされたデータURL(なんのこっちゃ)
-            $("#preview").attr("src", e.target.result);
+            preview.attr("src", e.target.result);
         };
         reader.readAsDataURL(file);
 
@@ -35,13 +41,13 @@ $(function () {
                 const analysisResult = result.responses[0].fullTextAnnotation.text;
                 console.log('Analysis Result:', result);
                 // 結果を画面に表示
-                $("#analysis_result_text").text(analysisResult);
+                analysisResultText.text(analysisResult);
                 sendDataToFirebase(analysisResult);
             })
     });
 
     // ボタンがクリックされたときの処理
-    $("#display_result_history").on("click", async function () {
+    displayResultHistory.on("click", async function () {
         try {
             const history = []; // データを保存する配列
 
@@ -51,13 +57,11 @@ $(function () {
             getDocs(ocrDataCollection)
                 .then((querySnapshot) => {
                     // 取得したデータを配列に追加
-                    querySnapshot.forEach((doc) => {
-                        history.push(doc.data());
-                    })
+                    querySnapshot.forEach((doc) => { history.push(doc.data()); })
                     // データをコンソールに表示
                     console.log(history);
                     // 必要ならデータを使ってUIを更新
-                    $("#analysis_result_text").html(historyElements(history));
+                    analysisResultText.html(historyElements(history));
                 });
 
         } catch (error) {
@@ -123,7 +127,7 @@ $(function () {
             time: serverTimestamp(),
         };
         addDoc(collection(db, "OCRData"), postData);
-        $("#analysis_result_timestamp").text(postData.time);
+        analysisResultTimestamp.text(postData.time);
 
     }
     // 「配列形式にした履歴データ」を入力して「表示用のタグにいれて」出力する関数
