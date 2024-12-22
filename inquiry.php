@@ -98,36 +98,36 @@ fclose($file);
                 const errorModal = new bootstrap.Modal($('#errorModal'));
                 errorModal.show();
                 console.log(errorModal);
-
             });
         </script>
     <?php endif; ?>
+    <header></header>
+    <div id="main_contents">
+        <form action="./inquiry_post_create.php" method="POST">
+            <div class="card">
+                <h1 class="card-title">問い合わせ内容を記入してください</h1>
+                <div class="card-body">
+                    <label for="room_no">
+                        部屋番号
+                    </label>
+                    <input type="text" id="room_no" name="room_no" class="form-control" />
 
-    <form action="./inquiry_post_create.php" method="POST">
-        <div class="card">
-            <h1 class="card-title">問い合わせ内容を記入してください</h1>
-            <div class="card-body">
-                <label for="room_no">
-                    部屋番号
-                </label>
-                <input type="text" id="room_no" name="room_no" class="form-control" />
-
-                <label for="inquiry" class="mt-3">
-                    問い合わせ内容
-                </label>
-                <textarea name="inquiry" id="inquiry" class="form-control"></textarea>
-                <input type="submit" value="送信" class="btn btn-primary mt-3">
+                    <label for="inquiry" class="mt-3">
+                        問い合わせ内容
+                    </label>
+                    <textarea name="inquiry" id="inquiry" class="form-control"></textarea>
+                    <input type="submit" value="送信" class="btn btn-primary mt-3">
+                </div>
             </div>
-        </div>
-    </form>
-    <div class="task_list">
-        <div class="card">
-            <h1 class="card-title">問い合わせ履歴</h1>
-            <div class="card-body">
-                <?= $str ?>
+        </form>
+        <div id="task_list">
+            <div class="card">
+                <h1 class="card-title">問い合わせ履歴</h1>
+                <div class="card-body"> <?= $str ?> </div>
             </div>
         </div>
     </div>
+    <footer></footer>
 </body>
 
 </html>

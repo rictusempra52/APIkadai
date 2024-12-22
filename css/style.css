@@ -1,7 +1,23 @@
+/* 全体のリセット */
+body {
+    margin: 0;
+    font-family: "Helvetica Neue",
+        Arial,
+        "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans",
+        Meiryo,
+        sans-serif;
+}
+
 img {
     width: 100%;
 }
 
 #analysis_result {
     white-space: pre-wrap;
+}
+
+.btn-primary {
+    background-color: indigo;
+    border-color: indigo;
 }
