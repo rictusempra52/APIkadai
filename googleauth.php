@@ -5,14 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 
 <body>
     <!-- ログインボタン -->
     <main>
         <div class="login-container">
-            <button id="google-login-btn">
-                <img src="img/google_logo_icon_169090.webp" alt="Google Icon" class="google-icon"> Googleでログイン
+            <button id="google-login-btn" class="btn btn-primary">
+                <img src="./img/google.webp" alt="Google Icon" class="google-icon"> Googleでログイン
             </button>
         </div>
     </main>
