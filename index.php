@@ -14,6 +14,7 @@
 
 <body>
   <?php include "include/header.php"; ?>
+
   <div id="buttonArea">
     <div class="card">
       <h1 class="card-title">作業予定・実績</h1>
@@ -47,8 +48,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
     crossorigin="anonymous"></script>
-
-
+  <script src="./js/apikey.js"></script>
+  <script src="./js/check_is_authenticated.js" type="module"></script>
 </body>
 
 </html>
