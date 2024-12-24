@@ -70,11 +70,11 @@ fclose($file);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         crossorigin="anonymous" />
     <link rel="stylesheet" href="./css/style.css" />
-
+    <link rel="stylesheet" href="./css/header.css" />
 </head>
 
 <body>
-    <?php include 'header.php'; ?>
+    <?php include "./include/header.php"; ?>
     <!-- エラーモーダル -->
     <?php if ($error): ?>
         <div class="modal fade show" id="errorModal" tabindex="-1" style="display: block;" aria-hidden="false">

@@ -1,6 +1,6 @@
 <header class="header">
     <!-- SVGアイコン -->
-    <a href="#" class="icon-link">
+    <a href="./index.php" class="icon-link">
         <svg class="icon" width="20" height="20" viewBox="0 0 64.81481481481481 292.23323636475305">
             <g transform="translate(-10.453328190887945, -125.88725048922286) scale(20.90665638177589)" fill="#f6f5f5">
                 <path

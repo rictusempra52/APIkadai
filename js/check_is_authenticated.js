@@ -12,14 +12,15 @@ function IsAuthenticated() {
     onAuthStateChanged(auth, (user) => {
         if (user) {
             // User is signed in
-            console.log('User is authenticated:', user);
+            console.log('User is authenticated:');
         } else {
             // User is signed out
             console.log('No user is authenticated');
             // Redirect to login page or show login prompt
             window.location.href = './googleauth.php';
         }
-        return user;
+        console.log(user);
+        // return user;
     });
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark"  >
 
 <head>
   <meta charset="UTF-8" />
@@ -33,7 +33,7 @@
     <div class="card">
       <h1 class="card-title">届け出・問い合わせ処理</h1>
       <button type="button" class="btn btn-primary" id="button6"
-        onclick="location.href='./register_notification_document.html'">
+        onclick="location.href='./register_notification_document.php'">
         届出書類を登録する
       </button>
       <button type="button" class="btn btn-primary" id="button7" onclick="location.href='./inquiry.php'">
@@ -45,9 +45,8 @@
       <button type="button" class="btn btn-primary" id="button9">業務の手順を見る</button>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <script src="./js/apikey.js"></script>
   <script src="./js/check_is_authenticated.js" type="module"></script>
 </body>
