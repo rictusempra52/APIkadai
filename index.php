@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark"  >
+<html lang="en" data-bs-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     crossorigin="anonymous" />
   <link rel="stylesheet" href="./css/style.css" />
-  <link rel="stylesheet" href="./css/header.css">
+  <link rel="stylesheet" href="./css/header.css" />
 </head>
 
 <body>
@@ -45,8 +47,6 @@
       <button type="button" class="btn btn-primary" id="button9">業務の手順を見る</button>
     </div>
   </div>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <script src="./js/apikey.js"></script>
   <script src="./js/check_is_authenticated.js" type="module"></script>
 </body>

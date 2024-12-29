@@ -13,7 +13,7 @@ $file = fopen('data/inquiry.csv', 'r');
 flock($file, LOCK_EX);
 
 if ($file) { // ファイルが開けているか確認
-    // ファイルから1行ずつ読み込みF
+    // ファイルから1行ずつ読み込み
     while ($line = fgets($file)) {
         // 行の前後の不要な空白や改行を削除
         $line = trim($line);

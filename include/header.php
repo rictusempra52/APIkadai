@@ -10,11 +10,12 @@
         </svg>
     </a>
     <!-- メニュー -->
-    <div class="menu">
-    </div>
-    <div class="usericon">
-        <!-- googleアイコン -->
-    </div>
+    <div class="menu"></div>
+    <div class="usericon"> <!-- googleアイコン --> </div>
+    <!-- firebaseのapikey読み込み -->
+    <script src="./js/apikey.js"></script>
+
+    <!-- usericonに、認証しているgoogleアカウントのアイコンを表示する処理 -->
     <script type="module">
         // firebase
         import { initializeApp }
@@ -46,7 +47,9 @@
             }
             // 認証していない場合
             else {
-                usericon.innerHTML = "";
+                usericon.innerHTML = "未認証";
+                console.log("認証していません");
+
             }
         });
 

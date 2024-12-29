@@ -90,7 +90,7 @@ $(function () {
                 requests: [
                     {
                         image: { content: base64Image },
-                        features: [{ type: 'TEXT_DETECTION', maxResults: 10 }] // 必要に応じて変更
+                        features: [{ type: 'TEXT_DETECTION', maxResults: 10 }]
                     }
                 ]
             };
@@ -103,9 +103,6 @@ $(function () {
                 },
                 body: JSON.stringify(requestBody)
             });
-
-            // console.log(response);
-
 
             // 結果を取得して返す
             if (response.ok) {
@@ -134,11 +131,11 @@ $(function () {
     function historyElements(historyDocuments) {
         const elements = [];
         historyDocuments.forEach(function (document) {
-            elements.push(`
-        <li id="${document.id}">
-        <p>${document.text}</p>
-        </li>
-      `);
+            elements.push(
+                `<li id="${document.id}">
+                    <p>${document.text}</p>
+                </li>`
+            );
         });
         return elements;
     }
