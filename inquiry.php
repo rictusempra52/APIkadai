@@ -6,55 +6,104 @@ $error = isset($_SESSION["error"]) ? $_SESSION["error"] : null;
 unset($_SESSION["error"]);
 
 // データまとめ用の空文字変数
-$str = '';
+$str = getDatafrommysql();
+var_dump($str);
+// // ファイルを開く（読み取り専用）
+// $file = fopen('data/inquiry.csv', 'r');
+// flock($file, LOCK_EX);
 
-// ファイルを開く（読み取り専用）
-$file = fopen('data/inquiry.csv', 'r');
-flock($file, LOCK_EX);
+// if ($file) { // ファイルが開けているか確認
+//     // ファイルから1行ずつ読み込み
+//     while ($line = fgets($file)) {
+//         // 行の前後の不要な空白や改行を削除
+//         $line = trim($line);
+//         // カンマで区切ってデータを分割
+//         $cells = explode(',', $line);
 
-if ($file) { // ファイルが開けているか確認
-    // ファイルから1行ずつ読み込み
-    while ($line = fgets($file)) {
-        // 行の前後の不要な空白や改行を削除
-        $line = trim($line);
-        // カンマで区切ってデータを分割
-        $cells = explode(',', $line);
+//         // データが3つ以上存在する場合のみ処理
+//         if (count($cells) >= 3) {
+//             // 配列からそれぞれの値を取得し、HTMLエスケープを行って安全にする
+//             $timestamp = htmlspecialchars($cells[0]);
+//             $room_no = htmlspecialchars($cells[1]);
+//             // 問い合わせ内容をデコードし、改行をHTMLの<br>タグに変換してHTMLエスケープ
+//             $inquiry = nl2br(
+//                 htmlspecialchars(
+//                     urldecode($cells[2])
+//                 )
+//             );
 
-        // データが3つ以上存在する場合のみ処理
-        if (count($cells) >= 3) {
-            // 配列からそれぞれの値を取得し、HTMLエスケープを行って安全にする
-            $timestamp = htmlspecialchars($cells[0]);
-            $room_no = htmlspecialchars($cells[1]);
-            // 問い合わせ内容をデコードし、改行をHTMLの<br>タグに変換してHTMLエスケープ
-            $inquiry = nl2br(
-                htmlspecialchars(
-                    urldecode($cells[2])
-                )
-            );
+//             // HTMLに問い合わせデータをカード形式で追加する
+//             $str .= "
+//             <div class='card mb-3'> 
+//                 <!-- 部屋番号 -->
+//                 <div class='card-header'>$room_no</div> 
+//                 <!-- カードの本文部分 -->
+//                 <div class='card-body'> 
+//                     <!-- タイムスタンプ -->
+//                     <h6 class='card-subtitle mb-2 text-muted'>$timestamp</h6> 
+//                     <!-- 問い合わせ内容 -->
+//                     <p class='card-text'>$inquiry</p> 
+//                 </div>
+//             </div>";
+//         } else {
+//             echo "ファイルにデータが3つ未満しかありません";
+//         }
+//     }
+// } else {
+//     echo "ファイルを開けません";
+// }
 
-            // HTMLに問い合わせデータをカード形式で追加する
-            $str .= "
+// flock($file, LOCK_UN);
+// fclose($file);
+
+function getDatafrommysql(): string
+{
+    // 各種項目設定
+    $dbn = 'mysql:dbname=mskanriapp;charset=utf8mb4;port=3306;host=localhost';
+    $user = 'root';
+    $pwd = '';
+
+    // DB接続
+    try {
+        $pdo = new PDO($dbn, $user, $pwd);
+    } catch (PDOException $e) {
+        echo json_encode(["database error" => "{$e->getMessage()}"]);
+        exit();
+    }
+
+    // SQL文作成
+    $sql = "SELECT * FROM inquiry";
+
+    $stmt = $pdo->prepare($sql);
+
+    // SQL実行（実行に失敗すると `sql error ...` が出力される）
+    try {
+        $status = $stmt->execute();
+    } catch (PDOException $e) {
+        echo json_encode(["sql error" => "{$e->getMessage()}"]);
+        exit();
+    }
+
+    // 結果の取得
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $output = '';
+
+    foreach ($result as $record) {
+        $output .= "
             <div class='card mb-3'> 
                 <!-- 部屋番号 -->
-                <div class='card-header'>$room_no</div> 
+                <div class='card-header'>{$record['room_no']}</div> 
                 <!-- カードの本文部分 -->
                 <div class='card-body'> 
                     <!-- タイムスタンプ -->
-                    <h6 class='card-subtitle mb-2 text-muted'>$timestamp</h6> 
+                    <h6 class='card-subtitle mb-2 text-muted'>登録日時:{$record['created_at']} 対応期限：{$record['deadline']}</h6>
                     <!-- 問い合わせ内容 -->
-                    <p class='card-text'>$inquiry</p> 
+                    <p class='card-text'>{$record['inquiry']}</p> 
                 </div>
             </div>";
-        } else {
-            echo "ファイルにデータが3つ未満しかありません";
-        }
     }
-} else {
-    echo "ファイルを開けません";
+    return $output;
 }
-
-flock($file, LOCK_UN);
-fclose($file);
 ?>
 
 <!DOCTYPE html>

@@ -14,7 +14,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // DOM
-const notificationDocument = $("#notification_document");
+const notificationDocument = document.getElementById("notification_document");
 const preview = document.getElementById("preview");
 const displayResultHistory = document.getElementById("display_result_history");
 const analysisResultText = document.getElementById("analysis_result_text");
