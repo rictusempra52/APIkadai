@@ -113,6 +113,7 @@ function getDatafromMySQL(): string
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -127,6 +128,7 @@ function getDatafromMySQL(): string
 </head>
 
 <body>
+    <!-- ヘッダー -->
     <?php include "./include/header.php"; ?>
     <!-- エラーモーダル -->
     <?php if ($error): ?>
@@ -143,7 +145,8 @@ function getDatafromMySQL(): string
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        <!-- モーダルを閉じるボタン　フォーカスが当たっているようにする -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" autofocus>閉じる</button>
                     </div>
                 </div>
             </div>
