@@ -4,14 +4,25 @@
 $roomNo = $_POST["room_no"];
 // urlencodeを使うことで、改行を無視してcsvファイルに書き込める
 $inquiry = urlencode($_POST["inquiry"]);
+$deadline = $_POST["deadline"];
 
 // 入力チェック
-if (empty($roomNo) || empty($inquiry)) {
+if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
     // セッションにエラー情報を保存
     session_start();
-    $_SESSION["error"] = "部屋番号または問い合わせ内容が入力されていません。";
-    // var_dump($_SESSION["error"]);
+    // 部屋番号または問い合わせ内容または締切日が入力されていない場合、どれが入力されていないかをエラー情報として保存する。
+    // 複数が入力されていない場合にも対応する
+    $errmsg = '次の項目が入力されていません：';
+    if (empty($roomNo))
+        $errmsg .= " 部屋番号";
+    if (empty($inquiry))
+        $errmsg .= " 問い合わせ内容";
+    if (empty($deadline))
+        $errmsg .= " 締切日";
+
+    $_SESSION["error"] = $errmsg;
 } else {
+    saveDatatoMySQL($roomNo, $inquiry, $deadline);
     // // タイムゾーンを設定
     // date_default_timezone_set('Asia/Tokyo');
     // // 日本語で曜日を追加する
@@ -19,10 +30,8 @@ if (empty($roomNo) || empty($inquiry)) {
     // $createdAt = date("Y/m/d") . $days[date("w")] . date(" H:i");
     // // ファイルに書き込む形式に変換
     // $writeData = "{$createdAt},{$roomNo},{$inquiry}\n";
-
     // CSVファイルを作成、更新
     // saveData("./data/inquiry.csv", $writeData);
-    saveDatatomysql($roomNo, $inquiry, $createdAt);
 }
 
 header("Location:./inquiry.php");
@@ -38,7 +47,7 @@ function saveData($filename, $writeData)
     fclose($file);
 }
 
-function saveDatatomysql($room_no, $inquiry, $deadline)
+function saveDatatoMySQL($room_no, $inquiry, $deadline)
 {
     // 各種項目設定
     $dbn = 'mysql:dbname=mskanriapp;charset=utf8mb4;port=3306;host=localhost';
@@ -69,7 +78,7 @@ function saveDatatomysql($room_no, $inquiry, $deadline)
 
     // SQL実行（実行に失敗すると `sql error ...` が出力される）
     try {
-        $status = $stmt->execute();
+        $stmt->execute();
     } catch (PDOException $e) {
         echo json_encode(["sql error" => "{$e->getMessage()}"]);
         exit();

@@ -6,8 +6,8 @@ $error = isset($_SESSION["error"]) ? $_SESSION["error"] : null;
 unset($_SESSION["error"]);
 
 // データまとめ用の空文字変数
-$str = getDatafrommysql();
-var_dump($str);
+$str = getDatafromMySQL();
+
 // // ファイルを開く（読み取り専用）
 // $file = fopen('data/inquiry.csv', 'r');
 // flock($file, LOCK_EX);
@@ -56,7 +56,10 @@ var_dump($str);
 // flock($file, LOCK_UN);
 // fclose($file);
 
-function getDatafrommysql(): string
+/** MySQLから問い合わせデータを取得し、HTMLにして返す関数
+ * @return string 問い合わせデータをHTMLに変換した文字列
+ */
+function getDatafromMySQL(): string
 {
     // 各種項目設定
     $dbn = 'mysql:dbname=mskanriapp;charset=utf8mb4;port=3306;host=localhost';
@@ -78,17 +81,19 @@ function getDatafrommysql(): string
 
     // SQL実行（実行に失敗すると `sql error ...` が出力される）
     try {
-        $status = $stmt->execute();
+        $stmt->execute();
     } catch (PDOException $e) {
         echo json_encode(["sql error" => "{$e->getMessage()}"]);
         exit();
     }
-
     // 結果の取得
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $output = '';
 
     foreach ($result as $record) {
+        // inquiryをデコード
+        $record['inquiry'] = urldecode($record['inquiry']);
+        // HTMLに問い合わせデータをカード形式で追加する
         $output .= "
             <div class='card mb-3'> 
                 <!-- 部屋番号 -->
@@ -108,7 +113,6 @@ function getDatafrommysql(): string
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -167,6 +171,11 @@ function getDatafrommysql(): string
                         問い合わせ内容
                     </label>
                     <textarea name="inquiry" id="inquiry" class="form-control"></textarea>
+                    <label for="inquiry" class="mt-3">
+                        対応期日
+                    </label>
+                    <input type="date" id="deadline" name="deadline" class="form-control">
+
                     <input type="submit" value="送信" class="btn btn-primary mt-3">
                 </div>
             </div>
