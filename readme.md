@@ -4,6 +4,7 @@
 
 お客様からの問い合わせを登録できるようにしました。  
 MySQL への接続ができるようになりました。
+これまでは部屋番号と問い合わせ内容のみでしたが、対応期日も保存するようになりました。
 
 # 工夫した点・こだわった点
 
@@ -16,7 +17,16 @@ MySQL への接続ができるようになりました。
 
 # 備考（感想、シェアしたいこと等なんでも）
 
-vscode のショートカットキーを意識して覚えるようにしました。  
-Alt+上下でカーソルのある行をそのまま上下に移動  
-https://qiita.com/12345/items/64f4372fbca041e949d0  
-include を使うと、header や footer をサイト内で共通化できる！
+- vscode のショートカットキーを意識して覚えるようにしました。
+- Alt+上下でカーソルのある行をそのまま上下に移動 https://qiita.com/12345/items/64f4372fbca041e949d0
+- include を使うと、header や footer をサイト内で共通化できる！
+
+## デプロイ時に困ったことメモ
+
+- filezilla で UP した後でも、デプロイされたものを確認しようとする古いファイルが開いてしまう。→ キャッシュ削除 or SuperReload(ctrl+shift+r) で解決した
+- {"database error":"SQLSTATE[HY000] [2002] No such file or directory"} のエラーが出る。localhost では問題ない → 未解決  
+   ﾁｬｯﾋﾟｰ：https://chatgpt.com/share/67723b87-6614-800b-96c6-604060d1be42
+  「接続先ホスト名が間違っている場合（例: localhost vs 127.0.0.1）、接続に失敗します。」を試したら、
+  今度は{"database error":"SQLSTATE[HY000] [2002] Connection refused"}のエラーになった。
+  → ホスト名は localhost でも 127.0.0.1 でも一緒で、いずれも localhost を指すことが分かった。  
+  → そもそも mysql の正しいホスト名や id を入れる必要があった。

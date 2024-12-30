@@ -61,18 +61,10 @@ $str = getDatafromMySQL();
  */
 function getDatafromMySQL(): string
 {
-    // 各種項目設定
-    $dbn = 'mysql:dbname=mskanriapp;charset=utf8mb4;port=3306;host=localhost';
-    $user = 'root';
-    $pwd = '';
-
+    // env.phpからデータのオブジェクトを取得
+    include "./env/env.php";
     // DB接続
-    try {
-        $pdo = new PDO($dbn, $user, $pwd);
-    } catch (PDOException $e) {
-        echo json_encode(["database error" => "{$e->getMessage()}"]);
-        exit();
-    }
+    $pdo = db_conn();
 
     // SQL文作成
     $sql = "SELECT * FROM inquiry";
