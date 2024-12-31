@@ -2,13 +2,28 @@
 
 // 変数定義
 $id = $_GET['id'];
+// 入力チェック
+if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
+    // セッションにエラー情報を保存
+    session_start();
+    // 部屋番号または問い合わせ内容または締切日が入力されていない場合、どれが入力されていないかをエラー情報として保存する。
+    // 複数が入力されていない場合にも対応する
+    $errmsg = '次の項目が入力されていません：';
+    if (empty($roomNo))
+        $errmsg .= " 部屋番号";
+    if (empty($inquiry))
+        $errmsg .= " 問い合わせ内容";
+    if (empty($deadline))
+        $errmsg .= " 締切日";
 
+    $_SESSION["error"] = $errmsg;
+} else {
+    addDatatoMySQL($roomNo, $inquiry, $deadline);
+}
 // idをキーにMySQLから問い合わせデータを取得
 $mySQLdata = getDatafromMySQL($id);
 
-// mySQLdataをもとに、inquiry_edit.phpを更新する
-
-header("Location:./inquiry/inquiry_edit.php");
+header("Location:./inquiry_edit.php");
 exit();
 
 /** idをキーにMySQLから問い合わせデータを取得する関数

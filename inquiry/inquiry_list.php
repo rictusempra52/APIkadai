@@ -50,7 +50,7 @@ function getDatafromMySQL()
                     <!-- 問い合わせ内容 -->
                     <p class='card-text'>{$record['inquiry']}</p> 
                     <!-- 編集ボタン -->
-                    <a href='./inquiry_post_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
+                    <a href='./inquiry_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
                 </div>
             </div>";
     }

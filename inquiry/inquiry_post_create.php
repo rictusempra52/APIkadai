@@ -23,29 +23,11 @@ if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
     $_SESSION["error"] = $errmsg;
 } else {
     addDatatoMySQL($roomNo, $inquiry, $deadline);
-    // // タイムゾーンを設定
-    // date_default_timezone_set('Asia/Tokyo');
-    // // 日本語で曜日を追加する
-    // $days = ["(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)"];
-    // $createdAt = date("Y/m/d") . $days[date("w")] . date(" H:i");
-    // // ファイルに書き込む形式に変換
-    // $writeData = "{$createdAt},{$roomNo},{$inquiry}\n";
-    // CSVファイルを作成、更新
-    // saveData("./data/inquiry.csv", $writeData);
 }
 
-header("Location:./inquiry/inquiry_edit.php");
+header("Location:../inquiry_edit.php");
 exit();
 
-// CSVファイルにデータを書き込む関数
-function saveData($filename, $writeData)
-{
-    $file = fopen($filename, "a");
-    flock($file, LOCK_EX);
-    fwrite($file, $writeData);
-    flock($file, LOCK_UN);
-    fclose($file);
-}
 // sql実行関数
 function executeQuery($sql, $bindings)
 {
@@ -136,4 +118,14 @@ function updateDatatoMySQL($id, $room_no, $inquiry, $deadline)
         echo json_encode(["error" => "更新する項目がありません"]);
         exit();
     }
+
+}
+// CSVファイルにデータを書き込む関数
+function saveData($filename, $writeData)
+{
+    $file = fopen($filename, "a");
+    flock($file, LOCK_EX);
+    fwrite($file, $writeData);
+    flock($file, LOCK_UN);
+    fclose($file);
 }
