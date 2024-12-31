@@ -1,18 +1,13 @@
 <?php
 
-if (!isset($_GET['id'])) {
-    // idが指定されていない場合のエラーハンドリング
-    echo "Error: ID not provided.";
+// 変数定義
+$id = $_GET['id'];
 
-} else {
-    // 変数定義
-    $id = $_GET['id'];
+// idをキーにMySQLから問い合わせデータを取得
+$mySQLdata = getDatafromMySQL($id);
 
-    // idをキーにMySQLから問い合わせデータを取得
-    $mySQLdata = getDatafromMySQL($id);
+// mySQLdataをもとに、inquiry_edit.phpを更新する
 
-    // mySQLdataをもとに、inquiry_edit.phpを更新する
-}
 header("Location:./inquiry/inquiry_edit.php");
 exit();
 
@@ -22,7 +17,7 @@ exit();
  */
 function getDatafromMySQL($id)
 {
-    // env.phpからデータのオブジェクトを取得
+    // env.phpからデータベースのキーなどを取得し、db_connを使えるようにする
     include "../env/env.php";
     // DB接続
     $pdo = db_conn();
@@ -49,7 +44,7 @@ function getDatafromMySQL($id)
 // sql実行関数
 function executeQuery($sql, $bindings)
 {
-    // env.phpからデータのオブジェクトを取得
+    // env.phpからデータベースのキーなどを取得し、db_connを使えるようにする
     include "../env/env.php";
     // DB接続
     $pdo = db_conn();

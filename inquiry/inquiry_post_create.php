@@ -49,7 +49,7 @@ function saveData($filename, $writeData)
 // sql実行関数
 function executeQuery($sql, $bindings)
 {
-    // env.phpからデータのオブジェクトを取得
+    // env.phpからデータベースのキーなどを取得し、db_connを使えるようにする
     include "../env/env.php";
     // DB接続
     $pdo = db_conn();
