@@ -1,51 +1,52 @@
 <?php
 
-// 変数定義
-$roomNo = $_POST["room_no"];
-// urlencodeを使うことで、改行を無視
-$inquiry = urlencode($_POST["inquiry"]);
-$deadline = $_POST["deadline"];
+if (!isset($_GET['id'])) {
+    // idが指定されていない場合のエラーハンドリング
+    echo "Error: ID not provided.";
 
-// 入力チェック
-if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
-    // セッションにエラー情報を保存
-    session_start();
-    // 部屋番号または問い合わせ内容または締切日が入力されていない場合、どれが入力されていないかをエラー情報として保存する。
-    // 複数が入力されていない場合にも対応する
-    $errmsg = '次の項目が入力されていません：';
-    if (empty($roomNo))
-        $errmsg .= " 部屋番号";
-    if (empty($inquiry))
-        $errmsg .= " 問い合わせ内容";
-    if (empty($deadline))
-        $errmsg .= " 締切日";
-
-    $_SESSION["error"] = $errmsg;
 } else {
-    saveDatatoMySQL($roomNo, $inquiry, $deadline);
-    // // タイムゾーンを設定
-    // date_default_timezone_set('Asia/Tokyo');
-    // // 日本語で曜日を追加する
-    // $days = ["(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)"];
-    // $createdAt = date("Y/m/d") . $days[date("w")] . date(" H:i");
-    // // ファイルに書き込む形式に変換
-    // $writeData = "{$createdAt},{$roomNo},{$inquiry}\n";
-    // CSVファイルを作成、更新
-    // saveData("./data/inquiry.csv", $writeData);
-}
+    // 変数定義
+    $id = $_GET['id'];
 
-header("Location:./inquiry.php");
+    // idをキーにMySQLから問い合わせデータを取得
+    $mySQLdata = getDatafromMySQL($id);
+
+    // mysqldataをもとに、inquiry.php内にある「<input type="text" id="room_no" name="room_no" class="form-control" />」テキストボックスを更新する
+    
+}
+header("Location:./inquiry/inquiry.php");
 exit();
 
-// CSVファイルにデータを書き込む関数
-function saveData($filename, $writeData)
+/** idをキーにMySQLから問い合わせデータを取得する関数
+ * @param int $id 取得する問い合わせデータのid
+ * @return array 取得した問い合わせデータ
+ */
+function getDatafromMySQL($id)
 {
-    $file = fopen($filename, "a");
-    flock($file, LOCK_EX);
-    fwrite($file, $writeData);
-    flock($file, LOCK_UN);
-    fclose($file);
+    // env.phpからデータのオブジェクトを取得
+    include "./env/env.php";
+    // DB接続
+    $pdo = db_conn();
+
+    // SQL文作成
+    $sql = "SELECT * FROM inquiry WHERE id = :id";
+
+    // SQL実行（実行に失敗すると `sql error ...` が出力される）
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo json_encode(["sql error" => "{$e->getMessage()}"]);
+        exit();
+    }
+
+    // 結果の取得
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
 }
+
 // sql実行関数
 function executeQuery($sql, $bindings)
 {

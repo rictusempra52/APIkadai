@@ -86,6 +86,7 @@ function getDatafromMySQL(): string
         // inquiryをデコード
         $record['inquiry'] = urldecode($record['inquiry']);
         // HTMLに問い合わせデータをカード形式で追加する
+        // カードには編集ボタンもつける
         $output .= "
             <div class='card mb-3'> 
                 <!-- 部屋番号 -->
@@ -96,6 +97,8 @@ function getDatafromMySQL(): string
                     <h6 class='card-subtitle mb-2 text-muted'>登録日時:{$record['created_at']} 対応期限：{$record['deadline']}</h6>
                     <!-- 問い合わせ内容 -->
                     <p class='card-text'>{$record['inquiry']}</p> 
+                    <!-- 編集ボタン -->
+                    <a href='./inquiry_post_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
                 </div>
             </div>";
     }
@@ -156,7 +159,7 @@ function getDatafromMySQL(): string
         <form action="./inquiry_post_create.php" method="POST">
             <div class="card">
                 <h1 class="card-title">問い合わせ内容を記入してください</h1>
-                <div class="card-body">
+                <div id="inquiry_form" class="card-body">
                     <label for="room_no">
                         部屋番号
                     </label>
