@@ -34,7 +34,7 @@ if (!empty($_GET['id'])) {
     <!-- ヘッダー -->
     <?php include "../include/header.php"; ?>
     <!-- エラーモーダル -->
-    <?php if (!empty($error)): ?>
+    <?php if (isset($error)): ?>
         <div class="modal fade show" id="errorModal" tabindex="-1" style="display: block;" aria-hidden="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

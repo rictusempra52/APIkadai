@@ -2,6 +2,11 @@
 
 // 変数定義
 $id = $_GET['id'];
+$roomNo = $_POST["room_no"];
+// urlencodeを使うことで、改行を無視
+$inquiry = urlencode($_POST["inquiry"]);
+$deadline = $_POST["deadline"];
+
 // 入力チェック
 if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
     // セッションにエラー情報を保存
