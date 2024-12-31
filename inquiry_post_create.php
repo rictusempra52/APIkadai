@@ -2,7 +2,7 @@
 
 // 変数定義
 $roomNo = $_POST["room_no"];
-// urlencodeを使うことで、改行を無視してcsvファイルに書き込める
+// urlencodeを使うことで、改行を無視
 $inquiry = urlencode($_POST["inquiry"]);
 $deadline = $_POST["deadline"];
 
@@ -46,8 +46,8 @@ function saveData($filename, $writeData)
     flock($file, LOCK_UN);
     fclose($file);
 }
-
-function saveDatatoMySQL($room_no, $inquiry, $deadline)
+// sql実行関数
+function executeQuery($sql, $bindings)
 {
     // env.phpからデータのオブジェクトを取得
     include "./env/env.php";
@@ -55,22 +55,85 @@ function saveDatatoMySQL($room_no, $inquiry, $deadline)
     $pdo = db_conn();
 
     // SQL文作成
-    $sql = "INSERT INTO 
-    inquiry (  id,  room_no,  inquiry,  deadline, created_at, updated_at)
-    VALUES  (NULL, :room_no, :inquiry, :deadline, now(),      now())";
-
     $stmt = $pdo->prepare($sql);
 
     // バインド変数を設定
-    $stmt->bindValue(':room_no', $room_no, PDO::PARAM_STR);
-    $stmt->bindValue(':inquiry', $inquiry, PDO::PARAM_STR);
-    $stmt->bindValue(':deadline', $deadline, PDO::PARAM_STR);
+    foreach ($bindings as $key => $value) {
+        $stmt->bindValue($key, $value[0], $value[1]);
+    }
 
     // SQL実行（実行に失敗すると `sql error ...` が出力される）
     try {
         $stmt->execute();
     } catch (PDOException $e) {
         echo json_encode(["sql error" => "{$e->getMessage()}"]);
+        exit();
+    }
+}
+
+// saveDatatoMySQL関数
+function saveDatatoMySQL($room_no, $inquiry, $deadline)
+{
+    // SQL文
+    $sql = "INSERT INTO inquiry (id, room_no, inquiry, deadline, created_at, updated_at)
+            VALUES (NULL, :room_no, :inquiry, :deadline, now(), now())";
+
+    // バインド変数の設定
+    $bindings = [
+        ':room_no' => [$room_no, PDO::PARAM_STR],
+        ':inquiry' => [$inquiry, PDO::PARAM_STR],
+        ':deadline' => [$deadline, PDO::PARAM_STR]
+    ];
+
+    // sql実行関数を呼び出し
+    executeQuery($sql, $bindings);
+}
+
+/** updateDatatoMySQL関数 
+ * $idが空の場合はエラーを吐く　空でない場合は更新
+ * @param int $id 更新するレコードのid
+ * @param string $room_no 部屋番号
+ * @param string $inquiry 問い合わせ内容
+ * @param string $deadline 締切日
+ */
+function updateDatatoMySQL($id, $room_no, $inquiry, $deadline)
+{
+    // idが空の場合はエラーを出力して終了
+    if (empty($id)) {
+        echo json_encode(["error" => "idが空のため更新すべきデータを探せません"]);
+        exit();
+    }
+    // 更新するカラムのセットとバインディング変数の準備
+    $setClauses = [];
+    $bindings = [':id' => [$id, PDO::PARAM_INT]];
+
+    // 各項目が空でないかつnullでない場合、セット句に追加し、バインディング変数も設定
+    if (!empty($room_no)) {
+        $setClauses[] = "room_no = :room_no";
+        $bindings[':room_no'] = [$room_no, PDO::PARAM_STR];
+    }
+    if (!empty($inquiry)) {
+        $setClauses[] = "inquiry = :inquiry";
+        $bindings[':inquiry'] = [$inquiry, PDO::PARAM_STR];
+    }
+    if (!empty($deadline)) {
+        $setClauses[] = "deadline = :deadline";
+        $bindings[':deadline'] = [$deadline, PDO::PARAM_STR];
+    }
+
+    // 更新するカラムがある場合のみSQL文を作成
+    if (count($setClauses) > 0) {
+        // SQL文の生成
+        $sql =
+            "UPDATE inquiry SET "
+            . implode(", ", $setClauses)
+            . ", updated_at = NOW() WHERE id = :id";
+
+        // SQL実行関数を呼び出し
+        executeQuery($sql, $bindings);
+    } else {
+        // 更新する項目がない場合
+        echo json_encode(["error" => "更新する項目がありません"]);
         exit();
     }
 }
