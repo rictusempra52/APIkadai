@@ -11,10 +11,9 @@ if (!isset($_GET['id'])) {
     // idをキーにMySQLから問い合わせデータを取得
     $mySQLdata = getDatafromMySQL($id);
 
-    // mysqldataをもとに、inquiry.php内にある「<input type="text" id="room_no" name="room_no" class="form-control" />」テキストボックスを更新する
-    
+    // mySQLdataをもとに、inquiry_edit.phpを更新する
 }
-header("Location:./inquiry/inquiry.php");
+header("Location:./inquiry/inquiry_edit.php");
 exit();
 
 /** idをキーにMySQLから問い合わせデータを取得する関数
@@ -24,7 +23,7 @@ exit();
 function getDatafromMySQL($id)
 {
     // env.phpからデータのオブジェクトを取得
-    include "./env/env.php";
+    include "../env/env.php";
     // DB接続
     $pdo = db_conn();
 
@@ -51,7 +50,7 @@ function getDatafromMySQL($id)
 function executeQuery($sql, $bindings)
 {
     // env.phpからデータのオブジェクトを取得
-    include "./env/env.php";
+    include "../env/env.php";
     // DB接続
     $pdo = db_conn();
 
@@ -72,8 +71,8 @@ function executeQuery($sql, $bindings)
     }
 }
 
-// saveDatatoMySQL関数
-function saveDatatoMySQL($room_no, $inquiry, $deadline)
+// MySQLに新しい問い合わせデータを追加する関数
+function addDatatoMySQL($room_no, $inquiry, $deadline)
 {
     // SQL文
     $sql = "INSERT INTO inquiry (id, room_no, inquiry, deadline, created_at, updated_at)
@@ -90,8 +89,9 @@ function saveDatatoMySQL($room_no, $inquiry, $deadline)
     executeQuery($sql, $bindings);
 }
 
-/** updateDatatoMySQL関数 
- * $idが空の場合はエラーを吐く　空でない場合は更新
+/**  
+ * $idがnullの場合はaddDatatoMySQL関数を呼び出す
+ * $idがnullでない場合は、nullでない項目に限り更新する
  * @param int $id 更新するレコードのid
  * @param string $room_no 部屋番号
  * @param string $inquiry 問い合わせ内容
@@ -99,16 +99,16 @@ function saveDatatoMySQL($room_no, $inquiry, $deadline)
  */
 function updateDatatoMySQL($id, $room_no, $inquiry, $deadline)
 {
-    // idが空の場合はエラーを出力して終了
+    // idが空の場合はaddDatatoMySQL関数を呼び出し
     if (empty($id)) {
-        echo json_encode(["error" => "idが空のため更新すべきデータを探せません"]);
-        exit();
+        addDatatoMySQL($room_no, $inquiry, $deadline);
+        return;
     }
     // 更新するカラムのセットとバインディング変数の準備
     $setClauses = [];
     $bindings = [':id' => [$id, PDO::PARAM_INT]];
 
-    // 各項目が空でないかつnullでない場合、セット句に追加し、バインディング変数も設定
+    // 空白でない項目をセット句に追加し、バインディング変数も設定
     if (!empty($room_no)) {
         $setClauses[] = "room_no = :room_no";
         $bindings[':room_no'] = [$room_no, PDO::PARAM_STR];

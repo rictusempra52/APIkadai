@@ -62,7 +62,7 @@ $str = getDatafromMySQL();
 function getDatafromMySQL(): string
 {
     // env.phpからデータのオブジェクトを取得
-    include "./env/env.php";
+    include "../env/env.php";
     // DB接続
     $pdo = db_conn();
 
@@ -105,6 +105,10 @@ function getDatafromMySQL(): string
     return $output;
 }
 ?>
+<!-- inquiry_post_edit.phpにより -->
+<?php
+
+?>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -124,7 +128,7 @@ function getDatafromMySQL(): string
 
 <body>
     <!-- ヘッダー -->
-    <?php include "./include/header.php"; ?>
+    <?php include "../include/header.php"; ?>
     <!-- エラーモーダル -->
     <?php if ($error): ?>
         <div class="modal fade show" id="errorModal" tabindex="-1" style="display: block;" aria-hidden="false">
@@ -160,18 +164,11 @@ function getDatafromMySQL(): string
             <div class="card">
                 <h1 class="card-title">問い合わせ内容を記入してください</h1>
                 <div id="inquiry_form" class="card-body">
-                    <label for="room_no">
-                        部屋番号
-                    </label>
+                    <label for="room_no">部屋番号</label>
                     <input type="text" id="room_no" name="room_no" class="form-control" />
-
-                    <label for="inquiry" class="mt-3">
-                        問い合わせ内容
-                    </label>
-                    <textarea name="inquiry" id="inquiry" class="form-control"></textarea>
-                    <label for="inquiry" class="mt-3">
-                        対応期日
-                    </label>
+                    <label for="inquiry" class="mt-3">問い合わせ内容</label>
+                    <textarea id="inquiry" name="inquiry" class="form-control"></textarea>
+                    <label for="inquiry" class="mt-3">対応期日</label>
                     <input type="date" id="deadline" name="deadline" class="form-control">
 
                     <input type="submit" value="送信" class="btn btn-primary mt-3">

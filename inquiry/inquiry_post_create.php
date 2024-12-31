@@ -22,7 +22,7 @@ if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
 
     $_SESSION["error"] = $errmsg;
 } else {
-    saveDatatoMySQL($roomNo, $inquiry, $deadline);
+    addDatatoMySQL($roomNo, $inquiry, $deadline);
     // // タイムゾーンを設定
     // date_default_timezone_set('Asia/Tokyo');
     // // 日本語で曜日を追加する
@@ -34,7 +34,7 @@ if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
     // saveData("./data/inquiry.csv", $writeData);
 }
 
-header("Location:./inquiry/inquiry.php");
+header("Location:./inquiry/inquiry_edit.php");
 exit();
 
 // CSVファイルにデータを書き込む関数
@@ -50,7 +50,7 @@ function saveData($filename, $writeData)
 function executeQuery($sql, $bindings)
 {
     // env.phpからデータのオブジェクトを取得
-    include "./env/env.php";
+    include "../env/env.php";
     // DB接続
     $pdo = db_conn();
 
@@ -72,7 +72,7 @@ function executeQuery($sql, $bindings)
 }
 
 // saveDatatoMySQL関数
-function saveDatatoMySQL($room_no, $inquiry, $deadline)
+function addDatatoMySQL($room_no, $inquiry, $deadline)
 {
     // SQL文
     $sql = "INSERT INTO inquiry (id, room_no, inquiry, deadline, created_at, updated_at)

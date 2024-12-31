@@ -38,7 +38,7 @@
         onclick="location.href='./register_notification_document.php'">
         届出書類を登録する
       </button>
-      <button type="button" class="btn btn-primary" id="button7" onclick="location.href='./inquiry/inquiry.php'">
+      <button type="button" class="btn btn-primary" id="button7" onclick="location.href='./inquiry/inquiry_edit.php'">
         お客様・支店からの問い合わせ
       </button>
     </div>
