@@ -13,7 +13,7 @@
     <div class="menu"></div>
     <div class="usericon"> <!-- googleアイコン --> </div>
     <!-- firebaseのapikey読み込み -->
-    <script src="./js/apikey.js"></script>
+    <script src="../js/apikey.js"></script>
 
     <!-- usericonに、認証しているgoogleアカウントのアイコンを表示する処理 -->
     <script type="module">
