@@ -1,4 +1,6 @@
 <?php
+require_once "../include/functions.php";
+
 // idがGETできる(=問い合わせデータ編集の)時だけ処理
 if (!empty($_GET['id'])) {
     // GETできる場合は、mySQLから問い合わせデータを取得して変数に格納
@@ -6,11 +8,7 @@ if (!empty($_GET['id'])) {
     $mySQLdata = getDatafromMySQL($id);
 } else {
     // GETできない場合は空の配列を格納
-    $mySQLdata = [
-        'room_no' => '',
-        'inquiry' => '',
-        'deadline' => ''
-    ];
+    $mySQLdata = ['room_no' => '', 'inquiry' => '', 'deadline' => ''];
 }
 ?>
 
@@ -32,7 +30,7 @@ if (!empty($_GET['id'])) {
 
 <body>
     <!-- ヘッダー -->
-    <?php include "../include/header.php"; ?>
+    <?php require_once "../include/header.php"; ?>
     <!-- エラーモーダル -->
     <?php session_start();
     if (isset($_SESSION["error"])):
@@ -63,7 +61,7 @@ if (!empty($_GET['id'])) {
             });
         </script>
     <?php endif; ?>
-
+    <!-- メインコンテンツ -->
     <div id="main_contents">
         <form action="./inquiry_post_edit.php" method="POST">
             <div class="card">
