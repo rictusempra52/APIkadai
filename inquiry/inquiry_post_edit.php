@@ -1,7 +1,7 @@
 <?php
 
-// 変数定義
-$id = $_GET['id'];
+// 変数定義 idはGETできる(=問い合わせデータ編集の)時だけ処理
+$id = isset($_GET['id']) ? $_GET['id'] : null;
 $roomNo = $_POST["room_no"];
 // urlencodeを使うことで、改行を無視
 $inquiry = urlencode($_POST["inquiry"]);

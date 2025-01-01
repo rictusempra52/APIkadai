@@ -1,9 +1,6 @@
 <?php
 // セッションの開始
 session_start();
-$error = isset($_SESSION["error"]) ? $_SESSION["error"] : null;
-// エラー情報を削除
-unset($_SESSION["error"]);
 
 // データまとめ用の変数
 $cardHTML = getDatafromMySQL();

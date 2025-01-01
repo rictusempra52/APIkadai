@@ -34,7 +34,11 @@ if (!empty($_GET['id'])) {
     <!-- ヘッダー -->
     <?php include "../include/header.php"; ?>
     <!-- エラーモーダル -->
-    <?php if (isset($error)): ?>
+    <?php session_start();
+    if (isset($_SESSION["error"])):
+        $error = $_SESSION["error"];
+        unset($_SESSION["error"]);
+        ?>
         <div class="modal fade show" id="errorModal" tabindex="-1" style="display: block;" aria-hidden="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -42,27 +46,24 @@ if (!empty($_GET['id'])) {
                         <h5 class="modal-title">入力エラー</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
                     <div class="modal-body">
                         <?= htmlspecialchars($error) ?>
                     </div>
-
                     <div class="modal-footer">
-                        <!-- モーダルを閉じるボタン　フォーカスが当たっているようにする -->
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" autofocus>閉じる</button>
                     </div>
                 </div>
             </div>
         </div>
         <script>
-            $(function () {
-                const errorModal = new bootstrap.Modal($('#errorModal'));
+            document.addEventListener('DOMContentLoaded', function () {
+                const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
                 errorModal.show();
                 console.log(errorModal);
             });
         </script>
     <?php endif; ?>
-    <header></header>
+
     <div id="main_contents">
         <form action="./inquiry_post_edit.php" method="POST">
             <div class="card">

@@ -21,6 +21,7 @@ if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
         $errmsg .= " 締切日";
 
     $_SESSION["error"] = $errmsg;
+
 } else {
     addDatatoMySQL($roomNo, $inquiry, $deadline);
 }
