@@ -8,25 +8,33 @@ MySQL への接続ができるようになりました。
 
 # 工夫した点・こだわった点
 
-複数行入力を適切に保存するために URL エンコードを使用したこと
+- 複数行入力を適切に保存するために URL エンコードを使用したこと
+- include/functions.php に関数を集約し、コードを整理したこと
+- 事業企画プレゼンなどを presentation/ に集約した！
 
 # 難しかった点・次回トライしたいこと（または機能）
 
-対応期限が近づいていたら赤くする機能を追加したい  
-問い合わせ対応の修正、更新がしたい
+## 難しかった点
+
+- そもそもデプロイが訳わからなさ過ぎて半日はつぶした・・・
+
+## 追加したい機能
+
+- 対応期限が近づいていたら目立たせる
+- 問い合わせ対応の修正、更新
 
 # 備考（感想、シェアしたいこと等なんでも）
 
-- vscode のショートカットキーを意識して覚えるようにしました。
-- Alt+上下でカーソルのある行をそのまま上下に移動 https://qiita.com/12345/items/64f4372fbca041e949d0
-- include を使うと、header や footer をサイト内で共通化できる！
+- vscode のショートカットキーを意識して覚えるようにしました。  
+  Alt+上下でカーソルのある行をそのまま上下に移動 https://qiita.com/12345/items/64f4372fbca041e949d0
+- require_once を使うと、header や footer ,function をサイト内で共通化できる！
 
 ## デプロイ時に困ったことメモ
 
-- filezilla で UP した後でも、デプロイされたものを確認しようとする古いファイルが開いてしまう。→ キャッシュ削除 or SuperReload(ctrl+shift+r) で解決した
-- {"database error":"SQLSTATE[HY000] [2002] No such file or directory"} のエラーが出る。localhost では問題ない → 未解決  
+- filezilla で UP した後でも、デプロイされたものを確認しようとする古いファイルが開いてしまう。→ キャッシュ削除 or SuperReload`ctrl+shift+r` で解決した
+- `{"database error":"SQLSTATE[HY000] [2002] No such file or directory"}` のエラーが出る。localhost では問題ない → 未解決  
    ﾁｬｯﾋﾟｰ：https://chatgpt.com/share/67723b87-6614-800b-96c6-604060d1be42
   「接続先ホスト名が間違っている場合（例: localhost vs 127.0.0.1）、接続に失敗します。」を試したら、
-  今度は{"database error":"SQLSTATE[HY000] [2002] Connection refused"}のエラーになった。
+  今度は`{"database error":"SQLSTATE[HY000] [2002] Connection refused"}`のエラーになった。
   → ホスト名は localhost でも 127.0.0.1 でも一緒で、いずれも localhost を指すことが分かった。  
   → そもそも mysql の正しいホスト名や id を入れる必要があった。
