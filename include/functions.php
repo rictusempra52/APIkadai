@@ -1,7 +1,6 @@
 <?php
 
-/**
- * データベースに接続する関数
+/** データベースに接続する関数
  * @return PDO 接続オブジェクト
  */
 function db_conn()
@@ -31,8 +30,7 @@ function db_conn()
     }
 }
 
-/**
- * クエリを実行する汎用関数
+/** SQL文を実行し、結果を取得する汎用関数
  * @param string $sql 実行するSQL文
  * @param array $bindings プレースホルダーにバインドする値
  * @param bool $fetchAll 結果を全件取得するかどうか
@@ -42,19 +40,29 @@ function executeQuery($sql, $bindings = [], $fetchAll = true)
 {
     $pdo = db_conn();
     try {
+        // SQL文を準備
         $stmt = $pdo->prepare($sql);
+
+        // プレースホルダーに値をバインド
         foreach ($bindings as $key => $value) {
             $stmt->bindValue($key, $value[0], $value[1]);
         }
+
+        // クエリを実行
         $stmt->execute();
-        return $fetchAll ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // 結果を取得
+        // fetchAll()で全件取得、fetch()で1件取得
+        return $fetchAll
+            ? $stmt->fetchAll(PDO::FETCH_ASSOC)
+            : $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
+        // エラーが発生した場合はエラーメッセージをJSON形式で出力
         exit(json_encode(["sql error" => $e->getMessage()]));
     }
 }
 
-/**
- * IDをキーに問い合わせデータを取得する
+/** IDをキーに問い合わせデータを取得する
  * @param int $id 問い合わせデータのID
  * @return array|null 問い合わせデータ
  */
@@ -62,7 +70,36 @@ function getDataFromMySQL($id)
 {
     $sql = "SELECT * FROM inquiry WHERE id = :id";
     $bindings = [":id" => [$id, PDO::PARAM_INT]];
-    return executeQuery($sql, $bindings, false);
+    $record = executeQuery($sql, $bindings, false);
+    // inquiryはURLエンコードされているので、decodeする
+    $record['inquiry'] = isset($record['inquiry'])
+        ? trim(urldecode($record['inquiry']))
+        : '';
+    return $record;
+
+}
+
+/** created_atやdeadlineを"yyyy年mm月dd日(曜日(日本語))"形式に変換する関数
+ * 
+ * @param string $date "Y-m-d"形式の日付
+ * @return string "yyyy年mm月dd日(曜日(日本語))"形式の日付
+ */
+function convertDateToJapanese($date)
+{
+    // 曜日を日本語に対応させる配列
+    $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+
+    // DateTimeオブジェクトを作成
+    $datetime = new DateTime($date);
+
+    // 曜日を数値で取得 (0=日曜日, 6=土曜日)
+    $weekdayNumber = $datetime->format('w');
+
+    // 曜日を日本語に変換
+    $weekday = $weekdays[$weekdayNumber];
+
+    // フォーマットを出力
+    return $datetime->format('Y年m月d日') . "($weekday)";
 }
 
 /**
@@ -79,6 +116,10 @@ function getInquiryHTML($id)
     }
 
     $record['inquiry'] = urldecode($record['inquiry']);
+    // 登録日時と対応期限を日本語日付形式に変換
+    $record['created_at'] = convertDateToJapanese($record['created_at']);
+    $record['deadline'] = convertDateToJapanese($record['deadline']);
+
     return "
         <div class='card mb-3'> 
             <div class='card-header'>{$record['room_no']}</div>

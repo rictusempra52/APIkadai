@@ -27,7 +27,7 @@ MySQL への接続ができるようになりました。
 
 - vscode のショートカットキーを意識して覚えるようにしました。  
   Alt+上下でカーソルのある行をそのまま上下に移動 https://qiita.com/12345/items/64f4372fbca041e949d0
-- require_once を使うと、header や footer ,function をサイト内で共通化できる！
+- `require_once` を使うと、header や footer ,function をサイト内で共通化できる！
 
 ## デプロイ時に困ったことメモ
 

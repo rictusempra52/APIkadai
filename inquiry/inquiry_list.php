@@ -51,7 +51,7 @@ $cardHTML = getAllInquiriesHTML();
         <div id="buttons">
             <!-- 問い合わせを登録するボタン -->
             <button type="button" class="btn btn-primary" id="button1"
-                onclick="location.href='./inquiry/inquiry_edit.php'">問い合わせを登録する</button>
+                onclick="location.href='./inquiry_edit.php'">問い合わせを登録する</button>
         </div>
         <div id="task_list">
             <div class="card">

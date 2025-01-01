@@ -1,4 +1,5 @@
 <?php
+require_once "../include/functions.php";
 
 // 変数定義 idはGETできる(=問い合わせデータ編集の)時だけ代入し、そうでなければnullにしておく
 $id = $_GET['id'] ?? null;
@@ -10,7 +11,6 @@ $deadline = $_POST["deadline"];
 if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
     session_start();
     // 部屋番号または問い合わせ内容または締切日が入力されていない場合、どれが入力されていないかをエラー情報として保存する。
-    // 複数が入力されていない場合にも対応する
     $errmsg = '次の項目が入力されていません：';
     if (empty($roomNo))
         $errmsg .= " 部屋番号";
@@ -26,5 +26,4 @@ if (empty($roomNo) || empty($inquiry) || empty($deadline)) {
     updateDatatoMySQL($id, $roomNo, $inquiry, $deadline);
 }
 
-header("Location:./inquiry_edit.php");
-exit();
+header("Location:./inquiry_list.php");
