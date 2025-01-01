@@ -1,58 +1,11 @@
 <?php
+require_once "../include/functions.php";
 // セッションの開始
 session_start();
 
 // データまとめ用の変数
-$cardHTML = getDatafromMySQL();
+$cardHTML = getAllInquiriesHTML();
 
-/** MySQLから問い合わせデータを取得し、HTMLにして返す関数
- * @return string 問い合わせデータをHTMLに変換した文字列
- */
-function getDatafromMySQL()
-{
-    // env.phpからデータベースのキーなどを取得し、db_connを使えるようにする
-    include "../env/env.php";
-    // DB接続
-    $pdo = db_conn();
-
-    // SQL文作成
-    $sql = "SELECT * FROM inquiry";
-
-    $stmt = $pdo->prepare($sql);
-
-    // SQL実行（実行に失敗すると `sql error ...` が出力される）
-    try {
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo json_encode(["sql error" => "{$e->getMessage()}"]);
-        exit();
-    }
-    // 結果の取得
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $output = '';
-
-    foreach ($result as $record) {
-        // inquiryをデコード
-        $record['inquiry'] = urldecode($record['inquiry']);
-        // HTMLに問い合わせデータをカード形式で追加する
-        // カードには編集ボタンもつける
-        $output .= "
-            <div class='card mb-3'> 
-                <!-- 部屋番号 -->
-                <div class='card-header'>{$record['room_no']}</div> 
-                <!-- カードの本文部分 -->
-                <div class='card-body'> 
-                    <!-- タイムスタンプ -->
-                    <h6 class='card-subtitle mb-2 text-muted'>登録日時:{$record['created_at']} 対応期限：{$record['deadline']}</h6>
-                    <!-- 問い合わせ内容 -->
-                    <p class='card-text'>{$record['inquiry']}</p> 
-                    <!-- 編集ボタン -->
-                    <a href='./inquiry_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
-                </div>
-            </div>";
-    }
-    return $output;
-}
 ?>
 
 <!DOCTYPE html>
