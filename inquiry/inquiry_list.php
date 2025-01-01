@@ -2,10 +2,8 @@
 require_once "../include/functions.php";
 // セッションの開始
 session_start();
-
 // データまとめ用の変数
 $cardHTML = getAllInquiriesHTML();
-
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +12,7 @@ $cardHTML = getAllInquiriesHTML();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>問い合わせ履歴</title>
 </head>
 
 <body>
@@ -50,6 +48,11 @@ $cardHTML = getAllInquiriesHTML();
         </script>
     <?php endif; ?>
     <div id="main_contents">
+        <div id="buttons">
+            <!-- 問い合わせを登録するボタン -->
+            <button type="button" class="btn btn-primary" id="button1"
+                onclick="location.href='./inquiry/inquiry_edit.php'">問い合わせを登録する</button>
+        </div>
         <div id="task_list">
             <div class="card">
                 <h1 class="card-title">問い合わせ履歴</h1>
