@@ -13,7 +13,7 @@ if (!empty($_GET['id'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
@@ -65,7 +65,7 @@ if (!empty($_GET['id'])) {
     <div id="main_contents">
         <form action="./inquiry_post_edit.php" method="POST">
             <div class="card">
-                <h1 class="card-title">問い合わせ内容を記入してください</h1>
+                <h1 class="card-header">問い合わせ内容を記入してください</h1>
                 <!-- 入力フォーム -->
                 <div id="inquiry_form" class="card-body">
                     <!-- 部屋番号 -->

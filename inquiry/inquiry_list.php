@@ -34,7 +34,7 @@ $cardHTML = getAllInquiriesHTML();
         </div>
         <div id="task_list">
             <div class="card">
-                <h1 class="card-title">問い合わせ履歴</h1>
+                <h1 class="card-header">問い合わせ履歴</h1>
                 <div class="card-body"> <?= $cardHTML ?> </div>
             </div>
         </div>

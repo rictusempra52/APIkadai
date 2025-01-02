@@ -1,27 +1,100 @@
-/* 全体のリセット */
-body {
-    margin: 0;
-    font-family: "Helvetica Neue",
-        Arial,
-        "Hiragino Kaku Gothic ProN",
-        "Hiragino Sans",
-        Meiryo,
-        sans-serif;
+/* 変数 */
+:root {
+    /* cardのmargin(これの2倍をカードの横幅から引いている) */
+    --card-margin: 8px;
 }
 
+/* 全体のリセット */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ボディのスタイル */
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #222;
+    background-color: #f0f0f0;
+}
+
+/* 画像のスタイル */
 img {
     width: 100%;
+    height: auto;
+    margin: 0 auto;
 }
 
-#analysis_result {
-    white-space: pre-wrap;
+/* リンクのスタイル */
+a {
+    text-decoration: none;
+    color: #337ab7;
 }
 
+/* リンクのホバー時のスタイル */
+a:hover {
+    text-decoration: underline;
+}
+
+/* プライマリボタンのスタイル */
 .btn-primary {
-    font-size: 20pt;
-    background-color: indigo;
-    border-color: white;
-    margin: 3pt;
-    border: 1pt;
-    padding: 9pt;
+    padding: 10px 20px;
+    font-size: 16px;
+    /* font-weight: bold; */
+    border: none;
+    border-radius: 12px;
+    background-color: #337ab7;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* プライマリボタンのホバー時のスタイル */
+.btn-primary:hover {
+    background-color: #23527c;
+}
+
+/* カードエリアのスタイル */
+.cardArea {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* カードのスタイル */
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - var(--card-margin) * 2);
+    margin: var(--card-margin);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+
+    gap: 3px;
+}
+
+/* 画像のスタイル */
+/* カードのヘッダーのスタイル*/
+.card-header {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* カードのホバー時のスタイル */
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* 高齢者にとって使いやすいように、タップ領域を大きくする */
+.btn-primary,
+.card {
+    padding: 12px;
 }
