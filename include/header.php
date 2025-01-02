@@ -1,13 +1,13 @@
 <header class="header">
     <!-- SVGアイコン -->
-    <a href="../index.php" class="icon-link">
-        <img src="img/logo.svg" alt="Logo" class="icon" width="20" height="20">
+    <a href="/Gsacademy/apiKadai/index.php" class="icon-link">
+        <img src="/Gsacademy/apiKadai/img/logo.svg" alt="Logo" class="icon" width="20" height="20">
     </a>
     <!-- メニュー -->
     <div class="menu"></div>
     <div class="usericon"> <!-- googleアイコン --> </div>
     <!-- firebaseのapikey読み込み -->
-    <script src="../js/apikey.js"></script>
+    <script src="/Gsacademy/apiKadai/js/apikey.js"></script>
 
     <!-- usericonに、認証しているgoogleアカウントのアイコンを表示する処理 -->
     <script type="module">

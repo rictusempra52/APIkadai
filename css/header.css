@@ -1,9 +1,11 @@
 /* ヘッダーのスタイル */
 .header {
-
     display: flex;
     align-items: center;
     padding: 10px;
+
+    /* 影をつける */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* SVGアイコンのリンクスタイル */
@@ -14,9 +16,15 @@
     text-decoration: none;
 }
 
-/* ユーザーのアイコンのスタイル */
-.usericon img {
-    height: 50px;
+/* ユーザーアイコンのスタイル */
+.usericon {
+    /* 右揃え */
+    margin-left: auto;
+
+    img {
+        width: 50px;
+        height: 50px;
+    }
 }
 
 /* SVGアイコンのスタイル */

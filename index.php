@@ -16,18 +16,18 @@
 
   <div id="cardArea">
     <div class="card">
-      <h1 class="card-title">作業予定・実績</h1>
+      <h1 class="card-header">作業予定・実績</h1>
       <button type="button" class="btn btn-primary" id="button2">管理日報を見る・登録する</button>
     </div>
     <div class="card">
-      <h1 class="card-title">作業記録</h1>
+      <h1 class="card-header">作業記録</h1>
       <button type="button" class="btn btn-primary" id="button3">水道検針の結果を登録する</button>
       <button type="button" class="btn btn-primary" id="button4">清掃・作業を登録する</button>
       <button type="button" class="btn btn-primary" id="button5">工事立ち合いを登録する</button>
     </div>
 
     <div class="card">
-      <h1 class="card-title">届け出・問い合わせ処理</h1>
+      <h1 class="card-header">届け出・問い合わせ処理</h1>
       <button type="button" class="btn btn-primary" id="button6"
         onclick="location.href='./register_notification_document.php'">
         届出書類を登録する
@@ -37,7 +37,7 @@
       </button>
     </div>
     <div class="card">
-      <h1 class="card-title">マニュアル</h1>
+      <h1 class="card-header">マニュアル</h1>
       <button type="button" class="btn btn-primary" id="button9">業務の手順を見る</button>
     </div>
   </div>
