@@ -1,6 +1,6 @@
 /* ヘッダーのスタイル */
 .header {
-    background-color: indigo;
+
     display: flex;
     align-items: center;
     padding: 10px;
@@ -12,6 +12,11 @@
     align-items: center;
     margin-right: 20px;
     text-decoration: none;
+}
+
+/* ユーザーのアイコンのスタイル */
+.usericon img {
+    height: 50px;
 }
 
 /* SVGアイコンのスタイル */
@@ -28,7 +33,6 @@
 
 /* メニュー項目のスタイル */
 .menuitem {
-    color: white;
     text-decoration: none;
     font-size: 16px;
 }
