@@ -13,7 +13,7 @@
 </head>
 
 <body>
-  <?php include "./include/header.php"; ?>
+  <?php require_once "./include/header.php"; ?>
   <div id="main">
     <input type="file" id="notification_document" capture="environment" accept="image/*" />
     <img id="preview" src="" alt="" />
