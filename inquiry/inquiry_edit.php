@@ -87,6 +87,7 @@ if (!empty($_GET['id'])) {
             </div>
         </form>
     </div>
+    <script src="../js/inquiry_edit.js"></script>
 </body>
 
 </html>

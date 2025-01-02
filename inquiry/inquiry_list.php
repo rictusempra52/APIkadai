@@ -12,41 +12,20 @@ $cardHTML = getAllInquiriesHTML();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/header.css" />
     <title>問い合わせ履歴</title>
 </head>
 
 <body>
     <!-- ヘッダー -->
     <?php include "../include/header.php"; ?>
-    <!-- エラーモーダル -->
-    <?php if ($error): ?>
-        <div class="modal fade show" id="errorModal" tabindex="-1" style="display: block;" aria-hidden="false">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">入力エラー</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
 
-                    <div class="modal-body">
-                        <?= htmlspecialchars($error) ?>
-                    </div>
-
-                    <div class="modal-footer">
-                        <!-- モーダルを閉じるボタン　フォーカスが当たっているようにする -->
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" autofocus>閉じる</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-            $(function () {
-                const errorModal = new bootstrap.Modal($('#errorModal'));
-                errorModal.show();
-                console.log(errorModal);
-            });
-        </script>
-    <?php endif; ?>
     <div id="main_contents">
         <div id="buttons">
             <!-- 問い合わせを登録するボタン -->
