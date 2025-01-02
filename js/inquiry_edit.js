@@ -1,7 +1,6 @@
 const deadline = document.getElementById("deadline");
 
-setMinimumDate();
-
+document.addEventListener('DOMContentLoaded', setMinimumDate);
 
 //以下、function定義-----------------------------
 //今日の日付以前は選択できないように設定する

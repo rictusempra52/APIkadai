@@ -15,15 +15,12 @@
 </head>
 
 <body>
-  <?php include "include/header.php"; ?>
+  <?php require_once "include/header.php"; ?>
 
   <div id="buttonArea">
     <div class="card">
       <h1 class="card-title">作業予定・実績</h1>
-      </button>
-      <button type="button" class="btn btn-primary" id="button2">
-        管理日報を見る・登録する
-      </button>
+      <button type="button" class="btn btn-primary" id="button2">管理日報を見る・登録する</button>
     </div>
     <div class="card">
       <h1 class="card-title">作業記録</h1>
@@ -48,7 +45,6 @@
     </div>
   </div>
   <script src="./js/apikey.js"></script>
-  <script src="./js/check_is_authenticated.js" type="module"></script>
 </body>
 
 </html>
