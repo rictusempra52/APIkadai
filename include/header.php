@@ -1,13 +1,16 @@
 <header class="header">
+    <?php // サブディレクトリ名を判別 (例: localhost であれば /Gsacademy/apiKadai/ そうでなければ'/')
+    $basePath = ($_SERVER['SERVER_NAME'] == 'localhost') ? '/Gsacademy/apiKadai/' : '/';
+    ?>
     <!-- SVGアイコン -->
-    <a href="/Gsacademy/apiKadai/index.php" class="icon-link">
-        <img src="/Gsacademy/apiKadai/img/logo.svg" alt="Logo" class="icon" width="20" height="20">
+    <a href="<?php echo $basePath; ?>index.php" class="icon-link">
+        <img src="<?php echo $basePath; ?>img/logo.svg" alt="Logo" class="icon" width="20" height="20">
     </a>
     <!-- メニュー -->
     <div class="menu"></div>
     <div class="usericon"> <!-- googleアイコン --> </div>
     <!-- firebaseのapikey読み込み -->
-    <script src="/Gsacademy/apiKadai/js/apikey.js"></script>
+    <script src="<?php echo $basePath; ?>js/apikey.js"></script>
 
     <!-- usericonに、認証しているgoogleアカウントのアイコンを表示する処理 -->
     <script type="module">
@@ -24,6 +27,7 @@
         onAuthStateChanged(auth, (user) => {
             // 認証している場合
             if (user) {
+                // img要素を作成
                 const profileImage = document.createElement("img");
                 // imgを50x50にする
                 profileImage.width = 50;

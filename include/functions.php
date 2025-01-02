@@ -1,11 +1,23 @@
 <?php
 
+function sakura_db_info()
+{
+    return [
+        //データベース名
+        "db_name" => getenv("sakuraName"),
+        //DBホスト
+        "db_host" => getenv("sakuraHost"),
+        //アカウント名
+        "db_id" => getenv("sakuraId"),
+        //パスワード。さくらのDBのPW
+        "db_pw" => getenv("sakuraPw"),
+    ];
+}
 /** データベースに接続する関数
  * @return PDO 接続オブジェクト
  */
 function db_conn()
 {
-    require_once "../env/env.php";
     $serverName = $_SERVER["SERVER_NAME"];
 
     // サーバー情報に基づきデータベース接続情報を設定
