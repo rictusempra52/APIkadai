@@ -1,18 +1,17 @@
 <?php
 
-function sakura_db_info()
-{
-    return [
-        //データベース名
-        "db_name" => getenv("sakuraName"),
-        //DBホスト
-        "db_host" => getenv("sakuraHost"),
-        //アカウント名
-        "db_id" => getenv("sakuraId"),
-        //パスワード。さくらのDBのPW
-        "db_pw" => getenv("sakuraPw"),
-    ];
-}
+// .envを読み込むための準備
+require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// .envからDB接続情報を取得
+$sakura_db_info = [
+    "db_name" => $_ENV["sakuraName"],
+    "db_host" => $_ENV["sakuraHost"],
+    "db_id" => $_ENV["sakuraID"],
+    "db_pw" => $_ENV["sakuraPW"],
+];
 /** データベースに接続する関数
  * @return PDO 接続オブジェクト
  */
@@ -21,8 +20,8 @@ function db_conn()
     $serverName = $_SERVER["SERVER_NAME"];
 
     // サーバー情報に基づきデータベース接続情報を設定
-    // dbinfoの値は、ローカル環境ならlocalhost、サーバー環境ならsakura_db_info()の返り値をとる
-    // sakura_db_info()が万が一返り値を返さない場合、空の配列をとる
+    // dbinfoの値は、ローカル環境ならlocalhost、サーバー環境ならsakura_db_infoの返り値をとる
+    // sakura_db_infoが万が一返り値を返さない場合、空の配列をとる
     // ternary演算子,null coalescing演算子について学ぶこと
     $dbInfo = ($serverName === "localhost")
         ? [
@@ -31,7 +30,7 @@ function db_conn()
             "db_id" => "root",
             "db_pw" => "",
         ]
-        : sakura_db_info() ?? [];
+        : $sakura_db_info ?? [];
 
     // データベース接続
     try {

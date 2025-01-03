@@ -1,5 +1,5 @@
 <?php
-require_once "../include/functions.php";
+require_once "..//functions.php";
 // セッションの開始
 session_start();
 // データまとめ用の変数
