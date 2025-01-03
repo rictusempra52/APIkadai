@@ -1,5 +1,5 @@
 <?php
-require_once "../include/functions.php";
+require_once "..//functions.php";
 
 // 変数定義 idはGETできる(=問い合わせデータ編集の)時だけ代入し、そうでなければnullにしておく
 $id = $_GET['id'] ?? null;

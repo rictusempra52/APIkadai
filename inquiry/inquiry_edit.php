@@ -1,5 +1,5 @@
 <?php
-require_once "../include/functions.php";
+require_once "..//functions.php";
 
 // idがGETできる(=問い合わせデータ編集の)時だけ処理
 if (!empty($_GET['id'])) {

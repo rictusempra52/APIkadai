@@ -28,8 +28,7 @@
       <div id="analysis_result_text">テキスト：</div>
     </div>
   </div>
-
-  <script src="./js/apikey.js"></script>
+  <script type="module" src="./js/apikey.js"></script>
   <script type="module" src="./js/register_notification_document.js"></script>
 </body>
 
