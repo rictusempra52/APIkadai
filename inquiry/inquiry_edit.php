@@ -39,16 +39,20 @@ if (!empty($_GET['id'])) {
                     <label for="room_no">部屋番号</label>
                     <input type="text" id="room_no" name="room_no" class="form-control"
                         value="<?= $mySQLdata['room_no'] ?>" required />
+                    <!-- 入力されているかどうかで内容が変更されるdiv -->
                     <div class="input-check"></div>
                     <!-- 問い合わせ内容 -->
                     <label for="inquiry" class="mt-3">問い合わせ内容</label>
-                    <textarea id="inquiry" name="inquiry" class="form-control" required><?= $mySQLdata['inquiry'] ?>
+                    <textarea id="inquiry" name="inquiry" class="form-control" required>
+                        <?= $mySQLdata['inquiry'] ?>
                     </textarea>
+                    <!-- 入力されているかどうかで内容が変更されるdiv -->
                     <div class="input-check"></div>
                     <!-- 対応期日 -->
                     <label for="inquiry" class="mt-3">対応期日</label>
                     <input type="date" id="deadline" name="deadline" class="form-control"
                         value="<?= $mySQLdata['deadline'] ?>" required />
+                    <!-- 入力されているかどうかで内容が変更されるdiv -->
                     <div class="input-check"></div>
                     <!-- 送信ボタン -->
                     <input type="submit" value="送信" class="btn btn-primary mt-3">

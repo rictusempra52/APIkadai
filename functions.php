@@ -1,5 +1,7 @@
 <?php
 
+// データベース関数
+
 /** データベースに接続する関数
  * @return PDO 接続オブジェクト
  */
@@ -77,34 +79,12 @@ function getDataFromMySQL($id)
     $record = executeQuery($sql, $bindings, false);
     // inquiryはURLエンコードされているので、decodeする
     $record['inquiry'] = isset($record['inquiry'])
-        ? trim(urldecode($record['inquiry']))
+        ? trim_all(urldecode($record['inquiry']))
         : '';
     return $record;
 
 }
 
-/** created_atやdeadlineを"yyyy年mm月dd日(曜日(日本語))"形式に変換する関数
- * 
- * @param string $date "Y-m-d"形式の日付
- * @return string "yyyy年mm月dd日(曜日(日本語))"形式の日付
- */
-function JPDate($date)
-{
-    // 曜日を日本語に対応させる配列
-    $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-
-    // DateTimeオブジェクトを作成
-    $datetime = new DateTime($date);
-
-    // 曜日を数値で取得 (0=日曜日, 6=土曜日)
-    $weekdayNumber = $datetime->format('w');
-
-    // 曜日を日本語に変換
-    $weekday = $weekdays[$weekdayNumber];
-
-    // フォーマットを出力
-    return $datetime->format('Y年m月d日') . "($weekday)";
-}
 
 /**
  * 問い合わせデータをHTML形式で返す
@@ -125,14 +105,14 @@ function getInquiryHTML($id)
     $record['deadline'] = JPDate($record['deadline']);
 
     return "
-        <div class='card mb-3'> 
-            <div class='card-header'>{$record['room_no']}</div>
-            <div class='card-body'> 
-                <h6 class='card-subtitle mb-2 text-muted'>登録日時:{$record['created_at']} 対応期限:{$record['deadline']}</h6>
-                <p class='card-text'>{$record['inquiry']}</p>
-                <a href='./inquiry_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
-            </div>
-        </div>";
+    <div class='card mb-3'> 
+    <div class='card-header'>{$record['room_no']}</div>
+    <div class='card-body'> 
+    <h6 class='card-subtitle mb-2 text-muted'>登録日時:{$record['created_at']} 対応期限:{$record['deadline']}</h6>
+    <p class='card-text'>{$record['inquiry']}</p>
+    <a href='./inquiry_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
+    </div>
+    </div>";
 }
 
 /**
@@ -305,3 +285,33 @@ function getCloudVision($imagePath)
     return $text;
 }
 
+// 文字列修正などこまごました関数
+
+/** trimでは全角空白を削除できないので、全角も含めて空白を削除する関数*/
+function trim_all($str)
+{
+    return trim(str_replace("\u{3000}", ' ', $str));
+}
+
+/** created_atやdeadlineを"yyyy年mm月dd日(曜日(日本語))"形式に変換する関数
+ * 
+ * @param string $date "Y-m-d"形式の日付
+ * @return string "yyyy年mm月dd日(曜日(日本語))"形式の日付
+ */
+function JPDate($date)
+{
+    // 曜日を日本語に対応させる配列
+    $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+
+    // DateTimeオブジェクトを作成
+    $datetime = new DateTime($date);
+
+    // 曜日を数値で取得 (0=日曜日, 6=土曜日)
+    $weekdayNumber = $datetime->format('w');
+
+    // 曜日を日本語に変換
+    $weekday = $weekdays[$weekdayNumber];
+
+    // フォーマットを出力
+    return $datetime->format('Y年m月d日') . "($weekday)";
+}
