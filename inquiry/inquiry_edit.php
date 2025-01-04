@@ -28,36 +28,6 @@ if (!empty($_GET['id'])) {
 <body>
     <!-- ヘッダー -->
     <?php require_once "../include/header.php"; ?>
-    <!-- エラーモーダル -->
-    <?php session_start();
-    if (isset($_SESSION["error"])):
-        $error = $_SESSION["error"];
-        unset($_SESSION["error"]);
-        ?>
-        <div class="modal fade show" id="errorModal" tabindex="-1" style="display: block;" aria-hidden="false">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">入力エラー</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <?= htmlspecialchars($error) ?>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" autofocus>閉じる</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-                errorModal.show();
-                console.log(errorModal);
-            });
-        </script>
-    <?php endif; ?>
     <!-- メインコンテンツ -->
     <div id="main_contents">
         <form action="./inquiry_post_edit.php" method="POST">
@@ -68,16 +38,16 @@ if (!empty($_GET['id'])) {
                     <!-- 部屋番号 -->
                     <label for="room_no">部屋番号</label>
                     <input type="text" id="room_no" name="room_no" class="form-control"
-                        value="<?= $mySQLdata['room_no'] ?>" />
+                        value="<?= $mySQLdata['room_no'] ?>" required />
                     <!-- 問い合わせ内容 -->
                     <label for="inquiry" class="mt-3">問い合わせ内容</label>
-                    <textarea id="inquiry" name="inquiry" class="form-control">
-                        <?= $mySQLdata['inquiry'] ?>
+                    <textarea id="inquiry" name="inquiry" class="form-control" required></textarea>
+                    <?= $mySQLdata['inquiry'] ?>
                     </textarea>
                     <!-- 対応期日 -->
                     <label for="inquiry" class="mt-3">対応期日</label>
                     <input type="date" id="deadline" name="deadline" class="form-control"
-                        value="<?= $mySQLdata['deadline'] ?>" />
+                        value="<?= $mySQLdata['deadline'] ?>" required />
                     <!-- 送信ボタン -->
                     <input type="submit" value="送信" class="btn btn-primary mt-3">
                 </div>
