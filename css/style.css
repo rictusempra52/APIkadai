@@ -103,8 +103,35 @@ a:hover {
     transition: all 0.3s ease;
 }
 
+/* card-body */
+.card-body {
+    width: 100%;
+    padding: 10px;
+}
+
 /* タップ領域を大きくする */
 .btn-primary,
 .card {
     padding: 12px;
+}
+
+/* 入力チェック(class=input-check)のdivのスタイル */
+input~.input-check::after,
+textarea~.input-check::after {
+    display: inline-block;
+    font-size: 9pt;
+}
+
+/* 入力が有効な場合のスタイル */
+input:valid~.input-check::after,
+textarea:valid~.input-check::after {
+    content: "✓入力済み";
+    color: green;
+}
+
+/* 入力が無効な場合のスタイル */
+input:invalid~.input-check::after,
+textarea:invalid~.input-check::after {
+    content: "※入力してください";
+    color: red;
 }
