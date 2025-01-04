@@ -29,7 +29,7 @@
     <div class="card">
       <h1 class="card-header">届け出・問い合わせ処理</h1>
       <button type="button" class="btn btn-primary" id="button6"
-        onclick="location.href='./register_notification_document.php'">
+        onclick="location.href='./register_notification_document/register_notification_document.php'">
         届出書類を登録する
       </button>
       <button type="button" class="btn btn-primary" id="button7" onclick="location.href='./inquiry/inquiry_list.php'">

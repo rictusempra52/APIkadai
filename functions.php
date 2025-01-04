@@ -88,7 +88,7 @@ function getDataFromMySQL($id)
  * @param string $date "Y-m-d"形式の日付
  * @return string "yyyy年mm月dd日(曜日(日本語))"形式の日付
  */
-function convertDateToJapanese($date)
+function JPDate($date)
 {
     // 曜日を日本語に対応させる配列
     $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -121,8 +121,8 @@ function getInquiryHTML($id)
 
     $record['inquiry'] = urldecode($record['inquiry']);
     // 登録日時と対応期限を日本語日付形式に変換
-    $record['created_at'] = convertDateToJapanese($record['created_at']);
-    $record['deadline'] = convertDateToJapanese($record['deadline']);
+    $record['created_at'] = JPDate($record['created_at']);
+    $record['deadline'] = JPDate($record['deadline']);
 
     return "
         <div class='card mb-3'> 
@@ -222,3 +222,86 @@ function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = nu
         exit(json_encode(["error" => "更新する項目がありません"]));
     }
 }
+
+/**
+ * 問い合わせデータを削除する
+ * @param int $id 削除するデータのID
+ */
+function deleteDatatoMySQL($id)
+{
+    $sql = "DELETE FROM inquiry WHERE id = :id";
+    $bindings = [":id" => [$id, PDO::PARAM_INT]];
+    executeQuery($sql, $bindings);
+}
+
+/**
+ * Google Cloud Vision APIにアクセスし、画像内に含まれるテキストを取得する
+ *
+ * @param string $imagePath 画像ファイルのパス
+ * @return string 画像内に含まれるテキスト
+ */
+function getCloudVision($imagePath)
+{
+    // APIキーを取得
+    $apiKey = $_ENV["cloudVisionAPIKey"];
+
+    // Vision APIのURL
+    $url = "https://vision.googleapis.com/v1/images:annotate?key=$apiKey";
+
+    // 画像ファイルをbase64エンコード
+    $imageData = base64_encode(file_get_contents($imagePath));
+
+    // リクエストボディ
+    $data = [
+        "requests" => [
+            [
+                // 画像
+                "image" => [
+                    "content" => $imageData,
+                ],
+                // 画像の特徴
+                "features" => [
+                    [
+                        // テキストの検出
+                        "type" => "TEXT_DETECTION",
+                        // 最大検出数
+                        "maxResults" => 1,
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    // cURLのオプション
+    $options = [
+        // URL
+        CURLOPT_URL => $url,
+        // POSTメソッド
+        CURLOPT_POST => true,
+        // POSTデータ
+        CURLOPT_POSTFIELDS => json_encode($data),
+        //レスポンスを文字列として取得
+        CURLOPT_RETURNTRANSFER => true,
+    ];
+
+    // cURLの初期化
+    $ch = curl_init();
+
+    // cURLのオプションの設定
+    curl_setopt_array($ch, $options);
+
+    // cURLの実行
+    $response = curl_exec($ch);
+
+    // cURLの終了
+    curl_close($ch);
+
+    // レスポンスをJSONデコード
+    $responseData = json_decode($response, true);
+
+    // 画像内に含まれるテキストを取得
+    $text = $responseData["responses"][0]["textAnnotations"][0]["description"];
+
+    return $text;
+}
+

@@ -1,3 +1,6 @@
+/* style.css */
+/* bootstrapをベースに見やすくしたスタイル */
+
 /* 変数 */
 :root {
     /* cardのmargin(これの2倍をカードの横幅から引いている) */
@@ -57,6 +60,13 @@ a:hover {
     background-color: #23527c;
 }
 
+/* プライマリボタンのdisabled時のスタイル */
+.btn-primary:disabled {
+    background-color: #ccc;
+    color: #999;
+    cursor: not-allowed;
+}
+
 /* カードエリアのスタイル */
 .cardArea {
     display: flex;
@@ -93,7 +103,7 @@ a:hover {
     transition: all 0.3s ease;
 }
 
-/* 高齢者にとって使いやすいように、タップ領域を大きくする */
+/* タップ領域を大きくする */
 .btn-primary,
 .card {
     padding: 12px;
