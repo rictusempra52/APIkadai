@@ -1,5 +1,4 @@
 <?php
-
 // データベース関数
 
 /** データベースに接続する関数
@@ -26,6 +25,7 @@ function db_conn()
             "db_id" => $_ENV["sakuraID"],
             "db_pw" => $_ENV["sakuraPW"],
         ];
+
 
     // データベース接続
     try {

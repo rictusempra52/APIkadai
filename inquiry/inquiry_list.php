@@ -4,6 +4,7 @@ require_once "..//functions.php";
 session_start();
 // データまとめ用の変数
 $cardHTML = getAllInquiriesHTML();
+
 ?>
 
 <!DOCTYPE html>
@@ -12,9 +13,6 @@ $cardHTML = getAllInquiriesHTML();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         crossorigin="anonymous" />
     <link rel="stylesheet" href="../css/style.css" />
@@ -40,6 +38,9 @@ $cardHTML = getAllInquiriesHTML();
         </div>
     </div>
     <footer></footer>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

@@ -7,15 +7,19 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // DOM
-const notificationDocument = document.getElementById("notification_document");
+const notifDoc = document.getElementById("notification_document");
 const preview = document.getElementById("preview");
 const displayResultHistory = document.getElementById("display_result_history");
 const analysisResultText = document.getElementById("analysis_result_text");
 const analysisResultTimestamp = document.getElementById("analysis_result_timestamp");
 
-$(function () {
+// イベントハンドラ
+document.addEventListener("DOMContentLoaded", function () {
+
     // ファイル入力（#notification_document）の変更イベントを監視
-    notificationDocument.on("change", function () {
+    notifDoc.on("change", function () {
+// 
+
         // 選択された最初のファイルを取得
         const file = this.files[0];
         const reader = new FileReader();
@@ -62,6 +66,11 @@ $(function () {
             alert("データの取得に失敗しました。");
         }
     });
+
+    /** Cloud Vision APIを使用して画像を分析する関数 
+     * @param {File} file 分析対象の画像ファイル
+     * @returns {Promise<Object>} 分析結果
+     */
     async function analysePicture(file) {
         const API_URL = `https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`;
 
@@ -80,22 +89,20 @@ $(function () {
 
             // Cloud Vision APIに送信するリクエストボディ
             const requestBody = {
-                requests: [
-                    {
-                        image: { content: base64Image },
-                        features: [{ type: 'TEXT_DETECTION', maxResults: 10 }]
-                    }
-                ]
+                requests: [{
+                    image: { content: base64Image },
+                    features: [{ type: 'TEXT_DETECTION', maxResults: 10 }]
+                }]
             };
 
             // Vision APIへリクエストを送信
             const response = await fetch(API_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody)
             });
+
+            console.log(response);
 
             // 結果を取得して返す
             if (response.ok) {
@@ -132,6 +139,4 @@ $(function () {
         });
         return elements;
     }
-
-
 });

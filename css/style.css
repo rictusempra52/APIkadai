@@ -1,6 +1,8 @@
 /* style.css */
 /* bootstrapをベースに見やすくしたスタイル */
 
+@import url(https://fonts.googleapis.com/earlyaccess/notosansjp.css);
+
 /* 変数 */
 :root {
     /* cardのmargin(これの2倍をカードの横幅から引いている) */
@@ -16,7 +18,7 @@
 
 /* ボディのスタイル */
 body {
-    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    font-family: "Noto Sans JP", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 1.5;
@@ -53,6 +55,8 @@ a:hover {
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: -1px -1px 10px 0px rgba(255, 255, 255, 0.5),
+        5px 5px 10px 0px rgba(0, 0, 0, 0.3);
 }
 
 /* プライマリボタンのホバー時のスタイル */
@@ -65,6 +69,12 @@ a:hover {
     background-color: #ccc;
     color: #999;
     cursor: not-allowed;
+}
+
+/* プライマリボタンのクリック時のスタイル  へこんだように見せる*/
+.btn-primary:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* カードエリアのスタイル */

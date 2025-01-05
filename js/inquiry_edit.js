@@ -2,6 +2,7 @@
 const room_no = document.getElementById("room_no");
 const inquiry = document.getElementById("inquiry");
 const deadline = document.getElementById("deadline");
+const button1 = document.getElementById("button1");
 
 // イベントハンドラ
 
@@ -28,8 +29,6 @@ function setMinimumDate() {
 function enableButton1() {
     // 必要な入力フィールドを配列に格納
     const fields = [room_no, inquiry, deadline];
-    // ボタン1の要素を取得
-    const button1 = document.getElementById("button1");
     // いずれかのフィールドが空の場合、ボタンを無効化
     button1.disabled = fields.some(field => !field.value);
 }
