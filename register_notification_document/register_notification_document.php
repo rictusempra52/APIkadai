@@ -33,7 +33,7 @@
 
   </div>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-  <script type="module" src="./js/apikey.js"></script>
+  <script type="module" src="./js/apikey.js" type="module"></script>
   <script type="module" src="./js/register_notification_document.js"></script>
 </body>
 

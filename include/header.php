@@ -1,6 +1,9 @@
 <header class="header">
-    <?php // サブディレクトリ名を判別 (例: localhost であれば /Gsacademy/apiKadai/ そうでなければ'/')
-    $basePath = ($_SERVER['SERVER_NAME'] == 'localhost') ? '/Gsacademy/apiKadai/' : 'https://indigodingo.sakura.ne.jp/apiKadai/';
+    <?php
+    // localhost かさくらサーバーかを判別して、パスを取得
+    $basePath = ($_SERVER['SERVER_NAME'] == 'localhost')
+        ? '/Gsacademy/apiKadai/'
+        : 'https://indigodingo.sakura.ne.jp/apiKadai/';
     ?>
     <!-- SVGアイコン -->
     <a href="<?php echo $basePath; ?>index.php" class="icon-link">
@@ -10,7 +13,7 @@
     <div class="menu"></div>
     <div class="usericon"> <!-- googleアイコン --> </div>
     <!-- firebaseのapikey読み込み -->
-    <script src="<?php echo $basePath; ?>js/apikey.js"></script>
+    <script type="module" src="<?php echo $basePath; ?>js/apikey.js"></script>
 
     <!-- usericonに、認証しているgoogleアカウントのアイコンを表示する処理 -->
     <script type="module">
@@ -18,6 +21,8 @@
         import { initializeApp }
             from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+        import { firebaseConfig } from "<?php echo $basePath; ?>js/apikey.js";
+
         initializeApp(firebaseConfig);
 
         // usericonに、認証しているgoogleアカウントのアイコンを表示する処理
@@ -50,6 +55,5 @@
 
             }
         });
-
     </script>
 </header>
