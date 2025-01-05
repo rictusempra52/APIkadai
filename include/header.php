@@ -1,6 +1,6 @@
 <header class="header">
     <?php // サブディレクトリ名を判別 (例: localhost であれば /Gsacademy/apiKadai/ そうでなければ'/')
-    $basePath = ($_SERVER['SERVER_NAME'] == 'localhost') ? '/Gsacademy/apiKadai/' : '/';
+    $basePath = ($_SERVER['SERVER_NAME'] == 'localhost') ? '/Gsacademy/apiKadai/' : 'https://indigodingo.sakura.ne.jp/apiKadai/';
     ?>
     <!-- SVGアイコン -->
     <a href="<?php echo $basePath; ?>index.php" class="icon-link">

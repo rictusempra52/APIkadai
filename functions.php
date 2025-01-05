@@ -27,7 +27,6 @@ function db_conn()
     //         "db_pw" => $_ENV["sakuraPW"],
     //     ];
 
-
     // データベース接続
     try {
         require_once "env.php";
@@ -120,8 +119,7 @@ function getInquiryHTML($id)
     </div>";
 }
 
-/**
- * すべての問い合わせデータを取得し、HTML形式で返す
+/** すべての問い合わせデータを取得し、HTML形式で返す
  * @return string HTML形式の問い合わせデータのリスト
  */
 function getAllInquiriesHTML()

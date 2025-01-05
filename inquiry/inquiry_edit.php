@@ -43,9 +43,8 @@ if (!empty($_GET['id'])) {
                     <div class="input-check"></div>
                     <!-- 問い合わせ内容 -->
                     <label for="inquiry" class="mt-3">問い合わせ内容</label>
-                    <textarea id="inquiry" name="inquiry" class="form-control" required>
-                        <?= $mySQLdata['inquiry'] ?>
-                    </textarea>
+                    <textarea id="inquiry" name="inquiry" class="form-control"
+                        required><?= $mySQLdata['inquiry'] ?></textarea>
                     <!-- 入力されているかどうかで内容が変更されるdiv -->
                     <div class="input-check"></div>
                     <!-- 対応期日 -->
