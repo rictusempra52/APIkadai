@@ -7,29 +7,34 @@
 function db_conn()
 {
     // .envを読み込むための準備
-    require_once __DIR__ . '/vendor/autoload.php';
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
+    // require_once __DIR__ . '/vendor/autoload.php';
+    // $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    // $dotenv->load();
 
     // .envからDB接続情報を取得
-    $dbInfo = $_SERVER["SERVER_NAME"] === "localhost"
-        ? [
-            "db_name" => "mskanriapp",
-            "db_host" => "127.0.0.1",
-            "db_id" => "root",
-            "db_pw" => "",
-        ]
-        : [
-            "db_name" => $_ENV["sakuraName"],
-            "db_host" => $_ENV["sakuraHost"],
-            "db_id" => $_ENV["sakuraID"],
-            "db_pw" => $_ENV["sakuraPW"],
-        ];
+    // $dbInfo = $_SERVER["SERVER_NAME"] === "localhost"
+    //     ? [
+    //         "db_name" => "mskanriapp",
+    //         "db_host" => "127.0.0.1",
+    //         "db_id" => "root",
+    //         "db_pw" => "",
+    //     ]
+    //     :
+    //     [
+    //         "db_name" => $_ENV["sakuraName"],
+    //         "db_host" => $_ENV["sakuraHost"],
+    //         "db_id" => $_ENV["sakuraID"],
+    //         "db_pw" => $_ENV["sakuraPW"],
+    //     ];
 
 
     // データベース接続
     try {
-        $dsn = "mysql:dbname={$dbInfo['db_name']};charset=utf8;host={$dbInfo['db_host']}";
+        require_once "env.php";
+        // DB接続情報
+        $dbInfo = dbInfo();
+        $dsn =
+            "mysql:dbname={$dbInfo['db_name']};charset=utf8;host={$dbInfo['db_host']}";
         return new PDO($dsn, $dbInfo['db_id'], $dbInfo['db_pw']);
     } catch (PDOException $e) {
         exit("DB Connection Error: " . $e->getMessage());
