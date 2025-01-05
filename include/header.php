@@ -5,6 +5,7 @@
         ? '/Gsacademy/apiKadai/'
         : 'https://indigodingo.sakura.ne.jp/apiKadai/';
     ?>
+
     <!-- SVGアイコン -->
     <a href="<?php echo $basePath; ?>index.php" class="icon-link">
         <img src="<?php echo $basePath; ?>img/logo.svg" alt="Logo" class="icon" width="20" height="20">
