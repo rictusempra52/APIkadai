@@ -221,12 +221,13 @@ function deleteDatatoMySQL($id)
  * Google Cloud Vision APIにアクセスし、画像内に含まれるテキストを取得する
  *
  * @param string $imagePath 画像ファイルのパス
- * @return string 画像内に含まれるテキスト
+ * @return string 画像内に含まれるテキストのjsonデータ
  */
 function getCloudVision($imagePath)
 {
+    require_once "./env.php";
     // APIキーを取得
-    $apiKey = $_ENV["cloudVisionAPIKey"];
+    $apiKey = cloudVisionInfo()['apiKey'];
 
     // Vision APIのURL
     $url = "https://vision.googleapis.com/v1/images:annotate?key=$apiKey";
@@ -282,10 +283,8 @@ function getCloudVision($imagePath)
     // レスポンスをJSONデコード
     $responseData = json_decode($response, true);
 
-    // 画像内に含まれるテキストを取得
-    $text = $responseData["responses"][0]["textAnnotations"][0]["description"];
-
-    return $text;
+    var_dump($responseData);
+    return $responseData;
 }
 
 // 文字列修正などこまごました関数

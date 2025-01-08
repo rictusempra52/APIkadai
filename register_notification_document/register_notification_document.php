@@ -12,6 +12,8 @@
 </head>
 
 <body>
+  <!-- <?php var_dump(getenv("CLOUD_VISION_API_KEY")) ?> -->
+
   <?php require_once "../include/header.php"; ?>
   <div id="main">
     <div id="register_area" class="card">
