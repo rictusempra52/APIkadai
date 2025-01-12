@@ -12,18 +12,26 @@
 /* 全体のリセット */
 * {
     box-sizing: border-box;
-    margin: 0;
     padding: 0;
 }
 
-/* ボディのスタイル */
-body {
+/* 共通スタイル */
+body,
+.card,
+.card-header,
+.card-body,
+.btn-primary,
+.btn-danger,
+.input-check {
     font-family: "Noto Sans JP", Arial, "Hiragino Kaku Gothic ProN",
         "Hiragino Sans", Meiryo, sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 1.5;
     color: #222;
+}
+
+body {
     background-color: #f0f0f0;
 }
 
@@ -40,42 +48,43 @@ a {
     color: #337ab7;
 }
 
-/* リンクのホバー時のスタイル */
 a:hover {
     text-decoration: underline;
 }
 
-/* プライマリボタンのスタイル */
-.btn-primary {
+/* ボタンのスタイル */
+.btn-primary,
+.btn-danger {
+    color: #fff;
+    border: none;
     padding: 10px 20px;
     font-size: 18px;
-    /* font-weight: bold; */
-    border: none;
-    border-radius: 12px;
-    background-color: #337ab7;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    border-radius: 10px;
     box-shadow: -1px -1px 10px 0px rgba(255, 255, 255, 0.5),
         5px 5px 10px 0px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* プライマリボタンのホバー時のスタイル */
+.btn-primary:active,
+.btn-danger:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* プライマリボタンのスタイル */
+.btn-primary {
+    background-color: #337ab7;
+}
+
 .btn-primary:hover {
     background-color: #23527c;
 }
 
-/* プライマリボタンのdisabled時のスタイル */
 .btn-primary:disabled {
     background-color: #ccc;
     color: #999;
     cursor: not-allowed;
-}
-
-/* プライマリボタンのクリック時のスタイル  へこんだように見せる*/
-.btn-primary:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* カードエリアのスタイル */
@@ -92,9 +101,9 @@ a:hover {
     align-items: center;
     width: calc(100% - var(--card-margin) * 2);
     margin: var(--card-margin);
+    padding: 10px;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-
     gap: 3px;
 }
 
@@ -120,19 +129,11 @@ a:hover {
     padding: 10px;
 }
 
-/* タップ領域を大きくする */
-.btn-primary,
-.card {
-    padding: 12px;
-}
-
 /* 入力チェックのdivのスタイル (class=input-check)
    - ::after 擬似要素を用いて、要素の後に内容を追加します */
 .input-check::after {
     display: inline-block;
-    /* インライン要素として表示します */
     font-size: 9pt;
-    /* フォントサイズを指定します */
 }
 
 /* 入力が有効な場合のスタイル
@@ -141,9 +142,7 @@ a:hover {
 input:valid+.input-check::after,
 textarea:valid+.input-check::after {
     content: "✓入力済み";
-    /* 表示テキストを追加します */
     color: green;
-    /* テキストの色を緑にします */
 }
 
 /* 入力が無効な場合のスタイル
@@ -151,7 +150,6 @@ textarea:valid+.input-check::after {
 input:invalid+.input-check::after,
 textarea:invalid+.input-check::after {
     content: "※入力してください";
-    /* 表示テキストを追加します */
     color: red;
-    /* テキストの色を赤にします */
 }
+
