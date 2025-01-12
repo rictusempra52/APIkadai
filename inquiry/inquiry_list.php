@@ -4,7 +4,8 @@ require_once "..//functions.php";
 session_start();
 // データまとめ用の変数
 $cardHTML = getAllInquiriesHTML();
-
+// JSON形式に変換（こうしないとなぜかエラーが出る）
+$data = json_decode($cardHTML, true);
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +39,6 @@ $cardHTML = getAllInquiriesHTML();
         </div>
     </div>
     <footer></footer>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 </body>

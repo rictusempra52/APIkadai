@@ -6,27 +6,6 @@
  */
 function db_conn()
 {
-    // .envを読み込むための準備
-    // require_once __DIR__ . '/vendor/autoload.php';
-    // $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    // $dotenv->load();
-
-    // .envからDB接続情報を取得
-    // $dbInfo = $_SERVER["SERVER_NAME"] === "localhost"
-    //     ? [
-    //         "db_name" => "mskanriapp",
-    //         "db_host" => "127.0.0.1",
-    //         "db_id" => "root",
-    //         "db_pw" => "",
-    //     ]
-    //     :
-    //     [
-    //         "db_name" => $_ENV["sakuraName"],
-    //         "db_host" => $_ENV["sakuraHost"],
-    //         "db_id" => $_ENV["sakuraID"],
-    //         "db_pw" => $_ENV["sakuraPW"],
-    //     ];
-
     // データベース接続
     try {
         require_once "env.php";
@@ -36,7 +15,7 @@ function db_conn()
             "mysql:dbname={$dbInfo['db_name']};charset=utf8;host={$dbInfo['db_host']}";
         return new PDO($dsn, $dbInfo['db_id'], $dbInfo['db_pw']);
     } catch (PDOException $e) {
-        exit("DB Connection Error: " . $e->getMessage());
+        exit("DB接続エラー@db_conn: " . $e->getMessage());
     }
 }
 
@@ -67,20 +46,28 @@ function executeQuery($sql, $bindings = [], $fetchAll = true)
             ? $stmt->fetchAll(PDO::FETCH_ASSOC)
             : $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        // エラーが発生した場合はエラーメッセージをJSON形式で出力
-        exit(json_encode(["sql error" => $e->getMessage()]));
+        error_log("SQL error@executeQuery: " . $e->getMessage());
+        exit(json_encode(["error" => "Database query failed"]));
     }
+
 }
 
 /** IDをキーに問い合わせデータを取得する
  * @param int $id 問い合わせデータのID
+ * @param bool $includeSoftDeletedItems 削除された問い合わせデータを含めるか (デフォルト：false)
  * @return array|null 問い合わせデータ
  */
-function getDataFromMySQL($id)
+function getDataFromMySQL($id, $includeSoftDeletedItems = false)
 {
-    $sql = "SELECT * FROM inquiry WHERE id = :id";
-    $bindings = [":id" => [$id, PDO::PARAM_INT]];
+    $sql = "SELECT * FROM inquiry WHERE id = :id"
+        . (
+            $includeSoftDeletedItems
+            ? ""
+            : " AND deleted_at IS NULL"
+        );
+    $bindings = [':id' => [$id, PDO::PARAM_INT]];
     $record = executeQuery($sql, $bindings, false);
+
     // inquiryはURLエンコードされているので、decodeする
     $record['inquiry'] = isset($record['inquiry'])
         ? trim_all(urldecode($record['inquiry']))
@@ -99,6 +86,9 @@ function getInquiryHTML($id)
 {
     $record = getDataFromMySQL($id);
 
+    var_dump("id: {$id}");
+    var_dump($record);
+
     if (!$record) {
         return "<p>データが見つかりませんでした。（ID: {$id}）</p>";
     }
@@ -116,23 +106,39 @@ function getInquiryHTML($id)
                 登録日時:{$record['created_at']} 対応期限:{$record['deadline']}
             </h6>
             <p class='card-text'>{$record['inquiry']}</p>
-            <a href='./inquiry_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
-            <a href='./inquiry_delete.php?id={$record['id']}' class='btn btn-danger'>削除</a>
+            <a id='btn-edit-{$record['id']}' 
+            href='./inquiry_edit.php?id={$record['id']}' 
+            class='btn btn-primary'>編集</a>
+            <a id='btn-delete-{$record['id']}' class='btn btn-danger'>削除</a>
         </div>
-    </div>";
+    </div>
+    <!-- 削除ボタンを押したときにalertを表示 -->
+    <script>
+        document.getElementById('btn-delete-{$record['id']}').addEventListener('click', function() {
+            if (confirm('本当に削除しますか？')) {
+                location.href = './inquiry_delete.php?id={$record['id']}';
+            }
+        });
+    </script>
+";
 }
 
 /** すべての問い合わせデータを取得し、HTML形式で返す
  * @return string HTML形式の問い合わせデータのリスト
  */
-function getAllInquiriesHTML()
+function getAllInquiriesHTML($includeSoftDeletedItems = false)
 {
-    $sql = "SELECT id FROM inquiry";
+    $sql = "SELECT id FROM inquiry"
+        . (
+            $includeSoftDeletedItems
+            ? ""
+            : " WHERE deleted_at IS NULL"
+        );
     $ids = executeQuery($sql, [], true);
     $output = '';
 
     foreach ($ids as $row) {
-        $output .= getInquiryHTML($row['id']);
+        $output .= getInquiryHTML($row['id'], );
     }
 
     return $output;
@@ -286,7 +292,6 @@ function getCloudVision($imagePath)
     // レスポンスをJSONデコード
     $responseData = json_decode($response, true);
 
-    var_dump($responseData);
     return $responseData;
 }
 
