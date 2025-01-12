@@ -120,15 +120,15 @@ a:hover {
 }
 
 /* 入力チェックのdivのスタイル (class=input-check)
-   - ::after 擬似要素を用いて、要素の後に内容を追加します */
+    - ::after 擬似要素を用いて、要素の後に内容を追加します */
 .input-check::after {
     display: inline-block;
     font-size: 9pt;
 }
 
 /* 入力が有効な場合のスタイル
-   - input:valid は有効な入力要素を選択します
-   - + は隣接兄弟結合子で、直後の兄弟要素を選択します */
+    - input:valid は有効な入力要素を選択します
+    - + は隣接兄弟結合子で、直後の兄弟要素を選択します */
 input:valid+.input-check::after,
 textarea:valid+.input-check::after {
     content: "✓入力済み";
