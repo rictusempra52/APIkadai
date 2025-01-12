@@ -41,6 +41,22 @@ $data = json_decode($cardHTML, true);
     <footer></footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
+    <script>
+        // idが「btn-delete」で始まるボタンを押したときにalertを表示
+        // 全ての削除ボタンを取得
+        const deleteButtons = document.querySelectorAll('[id^="btn-delete"]');
+        // 全ての削除ボタンにイベントリスナーを追加
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                if (confirm('本当に削除しますか？')) {
+                    location.href = `./inquiry_delete.php?id=${this.id.replace('btn-delete-', '')}`;
+                }
+            });
+        }
+        );
+    </script>
+
+    </script>
 </body>
 
 </html>

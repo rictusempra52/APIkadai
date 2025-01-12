@@ -108,16 +108,7 @@ function getInquiryHTML($id)
             class='btn btn-primary'>編集</a>
             <a id='btn-delete-{$record['id']}' class='btn btn-danger'>削除</a>
         </div>
-    </div>
-    <!-- 削除ボタンを押したときにalertを表示 -->
-    <script>
-        document.getElementById('btn-delete-{$record['id']}').addEventListener('click', function() {
-            if (confirm('本当に削除しますか？')) {
-                location.href = './inquiry_delete.php?id={$record['id']}';
-            }
-        });
-    </script>
-";
+    </div>";
 }
 
 /** すべての問い合わせデータを取得し、HTML形式で返す
@@ -167,8 +158,7 @@ function addDatatoMySQL($room_no, $inquiry, $deadline)
     executeQuery($sql, $bindings);
 }
 
-/**
- * 問い合わせデータを更新または追加する
+/** 問い合わせデータを更新または追加する
  * @param int|null $id 更新するデータのID（新規追加の場合はnull）
  * @param string|null $room_no 部屋番号
  * @param string|null $inquiry 問い合わせ内容
@@ -214,8 +204,7 @@ function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = nu
     }
 }
 
-/**
- * 問い合わせデータを論理削除する
+/** 問い合わせデータを論理削除する
  * @param int $id 削除するデータのID
  */
 function softDeleteFromMySQL($id)
