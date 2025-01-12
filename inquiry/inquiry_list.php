@@ -55,8 +55,6 @@ $data = json_decode($cardHTML, true);
         }
         );
     </script>
-
-    </script>
 </body>
 
 </html>
