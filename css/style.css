@@ -126,23 +126,32 @@ a:hover {
     padding: 12px;
 }
 
-/* 入力チェック(class=input-check)のdivのスタイル */
-input~.input-check::after,
-textarea~.input-check::after {
+/* 入力チェックのdivのスタイル (class=input-check)
+   - ::after 擬似要素を用いて、要素の後に内容を追加します */
+.input-check::after {
     display: inline-block;
+    /* インライン要素として表示します */
     font-size: 9pt;
+    /* フォントサイズを指定します */
 }
 
-/* 入力が有効な場合のスタイル */
-input:valid~.input-check::after,
-textarea:valid~.input-check::after {
+/* 入力が有効な場合のスタイル
+   - input:valid は有効な入力要素を選択します
+   - + は隣接兄弟結合子で、直後の兄弟要素を選択します */
+input:valid+.input-check::after,
+textarea:valid+.input-check::after {
     content: "✓入力済み";
+    /* 表示テキストを追加します */
     color: green;
+    /* テキストの色を緑にします */
 }
 
-/* 入力が無効な場合のスタイル */
-input:invalid~.input-check::after,
-textarea:invalid~.input-check::after {
+/* 入力が無効な場合のスタイル
+   - input:invalid は無効な入力要素を選択します */
+input:invalid+.input-check::after,
+textarea:invalid+.input-check::after {
     content: "※入力してください";
+    /* 表示テキストを追加します */
     color: red;
+    /* テキストの色を赤にします */
 }

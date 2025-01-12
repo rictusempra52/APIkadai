@@ -109,13 +109,16 @@ function getInquiryHTML($id)
     $record['deadline'] = JPDate($record['deadline']);
 
     return "
-    <div class='card mb-3'> 
-    <div class='card-header'>{$record['room_no']}</div>
-    <div class='card-body'> 
-    <h6 class='card-subtitle mb-2 text-muted'>登録日時:{$record['created_at']} 対応期限:{$record['deadline']}</h6>
-    <p class='card-text'>{$record['inquiry']}</p>
-    <a href='./inquiry_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
-    </div>
+    <div class='card mb-3'>
+        <div class='card-header'>{$record['room_no']}</div>
+        <div class='card-body'>
+            <h6 class='card-subtitle mb-2 text-muted'>
+                登録日時:{$record['created_at']} 対応期限:{$record['deadline']}
+            </h6>
+            <p class='card-text'>{$record['inquiry']}</p>
+            <a href='./inquiry_edit.php?id={$record['id']}' class='btn btn-primary'>編集</a>
+            <a href='./inquiry_delete.php?id={$record['id']}' class='btn btn-danger'>削除</a>
+        </div>
     </div>";
 }
 
@@ -207,12 +210,12 @@ function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = nu
 }
 
 /**
- * 問い合わせデータを削除する
+ * 問い合わせデータを論理削除する
  * @param int $id 削除するデータのID
  */
-function deleteDatatoMySQL($id)
+function softDeleteFromMySQL($id)
 {
-    $sql = "DELETE FROM inquiry WHERE id = :id";
+    $sql = "UPDATE inquiry SET deleted_at = NOW() WHERE id = :id";
     $bindings = [":id" => [$id, PDO::PARAM_INT]];
     executeQuery($sql, $bindings);
 }
@@ -292,7 +295,8 @@ function getCloudVision($imagePath)
 /** trimでは全角空白を削除できないので、全角も含めて空白を削除する関数*/
 function trim_all($str)
 {
-    return trim(str_replace("\u{3000}", ' ', $str));
+    return trim
+    (str_replace("\u{3000}", ' ', $str));
 }
 
 /** created_atやdeadlineを"yyyy年mm月dd日(曜日(日本語))"形式に変換する関数

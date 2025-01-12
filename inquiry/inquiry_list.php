@@ -22,7 +22,7 @@ $cardHTML = getAllInquiriesHTML();
 
 <body>
     <!-- ヘッダー -->
-    <?php include "../include/header.php"; ?>
+    <?php require_once "../include/header.php"; ?>
 
     <div id="main_contents">
         <div id="buttons">
