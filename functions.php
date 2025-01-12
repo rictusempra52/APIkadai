@@ -86,9 +86,6 @@ function getInquiryHTML($id)
 {
     $record = getDataFromMySQL($id);
 
-    var_dump("id: {$id}");
-    var_dump($record);
-
     if (!$record) {
         return "<p>データが見つかりませんでした。（ID: {$id}）</p>";
     }
@@ -131,7 +128,9 @@ function getAllInquiriesHTML($includeSoftDeletedItems = false)
     $sql = "SELECT id FROM inquiry"
         . (
             $includeSoftDeletedItems
+            //  論理削除された問い合わせデータを含める
             ? ""
+            // 論理削除された問い合わせデータを含めない
             : " WHERE deleted_at IS NULL"
         );
     $ids = executeQuery($sql, [], true);
