@@ -13,16 +13,6 @@
 * {
     box-sizing: border-box;
     padding: 0;
-}
-
-/* 共通スタイル */
-body,
-.card,
-.card-header,
-.card-body,
-.btn-primary,
-.btn-danger,
-.input-check {
     font-family: "Noto Sans JP", Arial, "Hiragino Kaku Gothic ProN",
         "Hiragino Sans", Meiryo, sans-serif;
     font-weight: 400;
@@ -152,4 +142,3 @@ textarea:invalid+.input-check::after {
     content: "※入力してください";
     color: red;
 }
-
