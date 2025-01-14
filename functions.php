@@ -103,10 +103,10 @@ function getInquiryHTML($id)
                 登録日時:{$record['created_at']} 対応期限:{$record['deadline']}
             </h6>
             <p class='card-text'>{$record['inquiry']}</p>
-            <a id='btn-edit-{$record['id']}' 
-            href='./inquiry_edit.php?id={$record['id']}' 
+            <a id='btn-edit-{$id}' 
+            href='./inquiry_edit.php?id={$id}'
             class='btn btn-primary'>編集</a>
-            <a id='btn-delete-{$record['id']}' class='btn btn-danger'>削除</a>
+            <a id='btn-delete-{$id}' class='btn btn-danger'>削除</a>
         </div>
     </div>";
 }
@@ -164,7 +164,7 @@ function addDatatoMySQL($room_no, $inquiry, $deadline)
  * @param string|null $inquiry 問い合わせ内容
  * @param string|null $deadline 締切日
  */
-function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = null)
+function updateDatatoMySQL($id = null, $room_no = null, $inquiry = null, $deadline = null)
 {
     // idが指定されていない場合は新規追加
     if (!$id) {
@@ -177,18 +177,18 @@ function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = nu
     $bindings = [":id" => [$id, PDO::PARAM_INT]];
 
     // 各項目が空でないかつnullでない場合、トリム処理を適用してセット句に追加
-    if ($room_no) {
-        $room_no = trim($room_no); // トリム
+    if (!empty($room_no)) {
+        $room_no = trim($room_no);
         $setClauses[] = "room_no = :room_no";
         $bindings[":room_no"] = [$room_no, PDO::PARAM_STR];
     }
-    if ($inquiry) {
-        $inquiry = trim($inquiry); // トリム
+    if (!empty($inquiry)) {
+        $inquiry = trim($inquiry);
         $setClauses[] = "inquiry = :inquiry";
         $bindings[":inquiry"] = [$inquiry, PDO::PARAM_STR];
     }
-    if ($deadline) {
-        $deadline = trim($deadline); // トリム
+    if (!empty($deadline)) {
+        $deadline = trim($deadline);
         $setClauses[] = "deadline = :deadline";
         $bindings[":deadline"] = [$deadline, PDO::PARAM_STR];
     }
@@ -200,7 +200,7 @@ function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = nu
         executeQuery($sql, $bindings);
     } else {
         // 更新する項目がない場合はエラーを返す
-        exit(json_encode(["error" => "更新する項目がありません"]));
+        exit(json_encode(["error" => " id=" . $id . " の問い合わせデータには更新する項目がありません"]));
     }
 }
 

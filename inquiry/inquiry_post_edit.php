@@ -1,8 +1,8 @@
 <?php
 require_once "..//functions.php";
 
-// 変数定義 idはGETできる(=問い合わせデータ編集の)時だけ代入し、そうでなければnullにしておく
-$id = $_GET['id'] ?? null;
+// 変数定義 idはPOSTできる(=問い合わせデータ編集の)時だけ代入し、そうでなければnullにしておく
+$id = $_POST['id'] ?? null;
 $roomNo = trim($_POST["room_no"]);
 $inquiry = urlencode(trim($_POST["inquiry"])); // urlencodeを使うことで、改行を無視
 $deadline = $_POST["deadline"];
