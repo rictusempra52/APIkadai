@@ -42,18 +42,26 @@ $data = json_decode($cardHTML, true);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script>
-        // idが「btn-delete」で始まるボタンを押したときにalertを表示
-        // 全ての削除ボタンを取得
-        const deleteButtons = document.querySelectorAll('[id^="btn-delete"]');
-        // 全ての削除ボタンにイベントリスナーを追加
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                if (confirm('本当に削除しますか？')) {
-                    location.href = `./inquiry_delete.php?id=${this.id.replace('btn-delete-', '')}`;
-                }
+        document.addEventListener('DOMContentLoaded', () => {
+            // $_SESSION["success"]の内容があればalertを表示
+            <?php if (isset($_SESSION["success"])): ?>
+                alert('<?= $_SESSION["success"] ?>');
+            <?php endif;
+            // $_SESSION["success"]を空にする(しないと繰り返し表示される)
+            unset($_SESSION["success"]) ?>
+
+            // idが「btn-delete」で始まるボタンを押したときにalertを表示
+            // 全ての削除ボタンを取得
+            const deleteButtons = document.querySelectorAll('[id^="btn-delete"]');
+            // 全ての削除ボタンにイベントリスナーを追加
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (confirm('本当に削除しますか？')) {
+                        location.href = `./inquiry_delete.php?id=${this.id.replace('btn-delete-', '')}`;
+                    }
+                });
             });
-        }
-        );
+        });
     </script>
 </body>
 

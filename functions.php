@@ -25,9 +25,15 @@ function db_conn()
  * @param bool $fetchAll 結果を全件取得するかどうか
  * @return mixed クエリ実行結果
  */
-function executeQuery($sql, $bindings = [], $fetchAll = true)
+function executeQuery($sql, array $bindings = [], bool $fetchAll = true)
 {
+    // DB接続
     $pdo = db_conn();
+
+    // セッション開始
+    if (!isset($_SESSION))
+        session_start();
+
     try {
         // SQL文を準備
         $stmt = $pdo->prepare($sql);
@@ -40,17 +46,37 @@ function executeQuery($sql, $bindings = [], $fetchAll = true)
         // クエリを実行
         $stmt->execute();
 
-        // 結果を取得
+        // 実行結果をセッションに保存(成功時)
+        if (preg_match('/^INSERT/', $sql)) {
+            $_SESSION["result"] = "追加に成功しました";
+        } elseif (preg_match('/^UPDATE/', $sql)) {
+            $_SESSION["result"] = "変更に成功しました";
+        } elseif (preg_match('/^DELETE/', $sql)) {
+            $_SESSION["result"] = "削除に成功しました";
+        }
+
+        // 結果を取得して返す
         // fetchAll()で全件取得、fetch()で1件取得
         return $fetchAll
             ? $stmt->fetchAll(PDO::FETCH_ASSOC)
             : $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        error_log("SQL error@executeQuery: " . $e->getMessage());
-        exit(json_encode(["error" => "Database query failed"]));
-    }
 
+    } catch (PDOException $e) {
+        // 実行結果をセッションに保存(失敗時)
+        if (preg_match('/^INSERT/', $sql)) {
+            $_SESSION["result"] = "追加に失敗しました";
+        } elseif (preg_match('/^UPDATE/', $sql)) {
+            $_SESSION["result"] = "変更に失敗しました";
+        } elseif (preg_match('/^DELETE/', $sql)) {
+            $_SESSION["result"] = "削除に失敗しました";
+        } elseif (preg_match('/^SELECT/', $sql)) {
+            $_SESSION["result"] = "検索に失敗しました";
+        }
+        // エラー情報を返す
+        return ["error" => $e->getMessage()];
+    }
 }
+
 
 /** IDをキーに問い合わせデータを取得する
  * @param int $id 問い合わせデータのID
@@ -100,7 +126,7 @@ function getInquiryHTML($id)
         <div class='card-header'>{$record['room_no']}</div>
         <div class='card-body'>
             <h6 class='card-subtitle mb-2 text-muted'>
-                登録日時:{$record['created_at']} 対応期限:{$record['deadline']}
+                登録日時:{$record['created_at']} <br> 対応期限:{$record['deadline']}
             </h6>
             <p class='card-text'>{$record['inquiry']}</p>
             <a id='btn-edit-{$id}' 
@@ -193,14 +219,19 @@ function updateDatatoMySQL($id = null, $room_no = null, $inquiry = null, $deadli
         $bindings[":deadline"] = [$deadline, PDO::PARAM_STR];
     }
 
+    session_start();
     // 更新するカラムがある場合のみSQL文を作成
     if ($setClauses) {
         $sql = "UPDATE inquiry SET " . implode(", ", $setClauses)
             . ", updated_at = NOW() WHERE id = :id";
         executeQuery($sql, $bindings);
+        unset($_SESSION["error"]);
+        $_SESSION["success"] = "データが" . ($id ? "更新" : "追加") . "されました。";
     } else {
         // 更新する項目がない場合はエラーを返す
-        exit(json_encode(["error" => " id=" . $id . " の問い合わせデータには更新する項目がありません"]));
+        unset($_SESSION["success"]);
+        $_SESSION["error"] = "id={$id} の問い合わせデータには更新する項目がありません";
+        exit;
     }
 }
 
