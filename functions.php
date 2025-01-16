@@ -19,20 +19,47 @@ function db_conn()
     }
 }
 
+/** 実行結果をセッションに保存する
+ * @param string $sql 実行したSQL文
+ * @param bool $isSuccess 実行結果(true:成功、false:失敗)
+ */
+function saveResultToSession(string $sql, bool $isSuccess)
+{
+    // セッション開始
+    if (!isset($_SESSION))
+        session_start();
+
+    // 実行結果をセッションに保存
+    $_SESSION["result"] = $isSuccess
+        ? match (true) {
+            // 追加、論理削除、変更、削除に成功した場合
+            preg_match('/^INSERT/', $sql) => "追加に成功しました",
+            preg_match('/^UPDATE.*deleted_at/', $sql) => "論理削除に成功しました",
+            preg_match('/^UPDATE/', $sql) => "変更に成功しました",
+            preg_match('/^DELETE/', $sql) => "削除に成功しました",
+            default => "不明なエラー",
+        }
+        : match (true) {
+            // 追加、論理削除、変更、削除に失敗した場合
+            preg_match('/^INSERT/', $sql) => "追加に失敗しました",
+            preg_match('/^UPDATE.*deleted_at/', $sql) => "論理削除に失敗しました",
+            preg_match('/^UPDATE/', $sql) => "変更に失敗しました",
+            preg_match('/^DELETE/', $sql) => "削除に失敗しました",
+            default => "不明なエラー",
+        };
+    // matchはswitch に似ている
+}
+
 /** SQL文を実行し、結果を取得する汎用関数
  * @param string $sql 実行するSQL文
  * @param array $bindings プレースホルダーにバインドする値
  * @param bool $fetchAll 結果を全件取得するかどうか
  * @return mixed クエリ実行結果
  */
-function executeQuery($sql, array $bindings = [], bool $fetchAll = true)
+function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
 {
     // DB接続
     $pdo = db_conn();
-
-    // セッション開始
-    if (!isset($_SESSION))
-        session_start();
 
     try {
         // SQL文を準備
@@ -46,14 +73,8 @@ function executeQuery($sql, array $bindings = [], bool $fetchAll = true)
         // クエリを実行
         $stmt->execute();
 
-        // 実行結果をセッションに保存(成功時)
-        if (preg_match('/^INSERT/', $sql)) {
-            $_SESSION["result"] = "追加に成功しました";
-        } elseif (preg_match('/^UPDATE/', $sql)) {
-            $_SESSION["result"] = "変更に成功しました";
-        } elseif (preg_match('/^DELETE/', $sql)) {
-            $_SESSION["result"] = "削除に成功しました";
-        }
+        // 実行結果をセッションに保存
+        saveResultToSession($sql, true);
 
         // 結果を取得して返す
         // fetchAll()で全件取得、fetch()で1件取得
@@ -62,16 +83,9 @@ function executeQuery($sql, array $bindings = [], bool $fetchAll = true)
             : $stmt->fetch(PDO::FETCH_ASSOC);
 
     } catch (PDOException $e) {
-        // 実行結果をセッションに保存(失敗時)
-        if (preg_match('/^INSERT/', $sql)) {
-            $_SESSION["result"] = "追加に失敗しました";
-        } elseif (preg_match('/^UPDATE/', $sql)) {
-            $_SESSION["result"] = "変更に失敗しました";
-        } elseif (preg_match('/^DELETE/', $sql)) {
-            $_SESSION["result"] = "削除に失敗しました";
-        } elseif (preg_match('/^SELECT/', $sql)) {
-            $_SESSION["result"] = "検索に失敗しました";
-        }
+        // 実行結果をセッションに保存
+        saveResultToSession($sql, false);
+
         // エラー情報を返す
         return ["error" => $e->getMessage()];
     }
@@ -225,13 +239,9 @@ function updateDatatoMySQL($id = null, $room_no = null, $inquiry = null, $deadli
         $sql = "UPDATE inquiry SET " . implode(", ", $setClauses)
             . ", updated_at = NOW() WHERE id = :id";
         executeQuery($sql, $bindings);
-        unset($_SESSION["error"]);
-        $_SESSION["success"] = "データが" . ($id ? "更新" : "追加") . "されました。";
     } else {
         // 更新する項目がない場合はエラーを返す
-        unset($_SESSION["success"]);
-        $_SESSION["error"] = "id={$id} の問い合わせデータには更新する項目がありません";
-        exit;
+        exit("更新する項目がありません");
     }
 }
 
