@@ -19,15 +19,43 @@ function db_conn()
     }
 }
 
+/** 書き込みの実行結果をセッションに保存する
+ * @param string $sql 実行したSQL文
+ * @param bool $isSuccess 実行結果(true:成功、false:失敗)
+ */
+function saveResultToSession(string $sql, bool $isSuccess)
+{
+    // SELECT文の場合は実行しない
+    if (str_contains($sql, "SELECT"))
+        return;
+
+    // sql文の状態を変数に代入
+    $sqlStatus = match (true) {
+        str_contains($sql, "INSERT") => "追加",
+        str_contains($sql, "UPDATE") && str_contains($sql, "deleted_at") => "論理削除",
+        str_contains($sql, "UPDATE") => "更新",
+        default => "その他",
+    };
+
+    // セッション開始
+    if (!isset($_SESSION))
+        session_start();
+
+    // 実行結果をセッションに保存
+    $_SESSION["result"] = $isSuccess ? "{$sqlStatus}に成功しました" : "{$sqlStatus}に失敗しました";
+}
+
 /** SQL文を実行し、結果を取得する汎用関数
  * @param string $sql 実行するSQL文
  * @param array $bindings プレースホルダーにバインドする値
  * @param bool $fetchAll 結果を全件取得するかどうか
  * @return mixed クエリ実行結果
  */
-function executeQuery($sql, $bindings = [], $fetchAll = true)
+function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
 {
+    // DB接続
     $pdo = db_conn();
+
     try {
         // SQL文を準備
         $stmt = $pdo->prepare($sql);
@@ -38,19 +66,25 @@ function executeQuery($sql, $bindings = [], $fetchAll = true)
         }
 
         // クエリを実行
-        $stmt->execute();
+        $result = $stmt->execute();
 
-        // 結果を取得
+        // 結果を取得して返す
         // fetchAll()で全件取得、fetch()で1件取得
-        return $fetchAll
+        $executeQuery = $fetchAll
             ? $stmt->fetchAll(PDO::FETCH_ASSOC)
             : $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        error_log("SQL error@executeQuery: " . $e->getMessage());
-        exit(json_encode(["error" => "Database query failed"]));
-    }
 
+    } catch (PDOException $e) {
+        // エラー情報を返す
+        $executeQuery = ["error" => $e->getMessage()];
+
+    } finally {
+        // 実行結果をセッションに保存
+        saveResultToSession($sql, $result);
+        return $executeQuery;
+    }
 }
+
 
 /** IDをキーに問い合わせデータを取得する
  * @param int $id 問い合わせデータのID
@@ -100,15 +134,24 @@ function getInquiryHTML($id)
         <div class='card-header'>{$record['room_no']}</div>
         <div class='card-body'>
             <h6 class='card-subtitle mb-2 text-muted'>
-                登録日時:{$record['created_at']} 対応期限:{$record['deadline']}
+                登録日時:{$record['created_at']} <br> 対応期限:{$record['deadline']}
             </h6>
             <p class='card-text'>{$record['inquiry']}</p>
-            <a id='btn-edit-{$record['id']}' 
-            href='./inquiry_edit.php?id={$record['id']}' 
+            <a id='btn-edit-{$id}' 
+            href='./inquiry_edit.php?id={$id}'
             class='btn btn-primary'>編集</a>
-            <a id='btn-delete-{$record['id']}' class='btn btn-danger'>削除</a>
+            <a id='btn-delete-{$id}' 
+            class='btn btn-danger'>削除</a>
         </div>
-    </div>";
+    </div>
+    <!-- btn-deleteのイベントリスナー -->
+    <script>
+        document.getElementById('btn-delete-{$id}').addEventListener('click', () => {
+            if (confirm('本当に削除しますか？')) {
+                location.href = './inquiry_delete.php?id={$id}';
+            }
+        })
+    </script>";
 }
 
 /** すべての問い合わせデータを取得し、HTML形式で返す
@@ -117,8 +160,7 @@ function getInquiryHTML($id)
 function getAllInquiriesHTML($includeSoftDeletedItems = false)
 {
     $sql = "SELECT id FROM inquiry"
-        . (
-            $includeSoftDeletedItems
+        . ($includeSoftDeletedItems
             //  論理削除された問い合わせデータを含める
             ? ""
             // 論理削除された問い合わせデータを含めない
@@ -164,7 +206,7 @@ function addDatatoMySQL($room_no, $inquiry, $deadline)
  * @param string|null $inquiry 問い合わせ内容
  * @param string|null $deadline 締切日
  */
-function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = null)
+function updateDatatoMySQL($id = null, $room_no = null, $inquiry = null, $deadline = null)
 {
     // idが指定されていない場合は新規追加
     if (!$id) {
@@ -177,22 +219,23 @@ function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = nu
     $bindings = [":id" => [$id, PDO::PARAM_INT]];
 
     // 各項目が空でないかつnullでない場合、トリム処理を適用してセット句に追加
-    if ($room_no) {
-        $room_no = trim($room_no); // トリム
+    if (!empty($room_no)) {
+        $room_no = trim($room_no);
         $setClauses[] = "room_no = :room_no";
         $bindings[":room_no"] = [$room_no, PDO::PARAM_STR];
     }
-    if ($inquiry) {
-        $inquiry = trim($inquiry); // トリム
+    if (!empty($inquiry)) {
+        $inquiry = trim($inquiry);
         $setClauses[] = "inquiry = :inquiry";
         $bindings[":inquiry"] = [$inquiry, PDO::PARAM_STR];
     }
-    if ($deadline) {
-        $deadline = trim($deadline); // トリム
+    if (!empty($deadline)) {
+        $deadline = trim($deadline);
         $setClauses[] = "deadline = :deadline";
         $bindings[":deadline"] = [$deadline, PDO::PARAM_STR];
     }
 
+    session_start();
     // 更新するカラムがある場合のみSQL文を作成
     if ($setClauses) {
         $sql = "UPDATE inquiry SET " . implode(", ", $setClauses)
@@ -200,7 +243,7 @@ function updateDatatoMySQL($id, $room_no = null, $inquiry = null, $deadline = nu
         executeQuery($sql, $bindings);
     } else {
         // 更新する項目がない場合はエラーを返す
-        exit(json_encode(["error" => "更新する項目がありません"]));
+        exit("更新する項目がありません");
     }
 }
 
@@ -296,6 +339,7 @@ function trim_all($str)
  * 
  * @param string $date "Y-m-d"形式の日付
  * @return string "yyyy年mm月dd日(曜日(日本語))"形式の日付
+ * @param string $date "Y-m-d"形式の日付
  */
 function JPDate($date)
 {

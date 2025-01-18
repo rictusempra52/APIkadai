@@ -1,11 +1,10 @@
+
 <?php
 require_once "..//functions.php";
 // セッションの開始
 session_start();
 // データまとめ用の変数
 $cardHTML = getAllInquiriesHTML();
-// JSON形式に変換（こうしないとなぜかエラーが出る）
-$data = json_decode($cardHTML, true);
 ?>
 
 <!DOCTYPE html>
@@ -31,29 +30,27 @@ $data = json_decode($cardHTML, true);
             <button type="button" class="btn btn-primary" id="button1"
                 onclick="location.href='./inquiry_edit.php'">問い合わせを登録する</button>
         </div>
-        <div id="task_list">
-            <div class="card">
-                <h1 class="card-header">問い合わせ履歴</h1>
-                <div class="card-body"> <?= $cardHTML ?> </div>
-            </div>
+        <div id="task_list" class="card">
+            <h1 class="card-header">問い合わせ履歴</h1>
+            <div class="card-body"> <?= $cardHTML ?> </div>
         </div>
     </div>
     <footer></footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script>
-        // idが「btn-delete」で始まるボタンを押したときにalertを表示
-        // 全ての削除ボタンを取得
-        const deleteButtons = document.querySelectorAll('[id^="btn-delete"]');
-        // 全ての削除ボタンにイベントリスナーを追加
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                if (confirm('本当に削除しますか？')) {
-                    location.href = `./inquiry_delete.php?id=${this.id.replace('btn-delete-', '')}`;
-                }
-            });
-        }
-        );
+        document.addEventListener('DOMContentLoaded', () => {
+            // $_SESSION["result"]の内容があればalertを表示
+            const result = <?=
+                isset($_SESSION["result"])
+                ? json_encode($_SESSION["result"])
+                : null ?>;
+            if (result) alert(result);
+
+            // $_SESSION["result"]を空にする(しないと繰り返し表示される)
+            <?php unset($_SESSION["result"]) ?>
+
+        });
     </script>
 </body>
 
