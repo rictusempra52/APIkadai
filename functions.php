@@ -25,29 +25,24 @@ function db_conn()
  */
 function saveResultToSession(string $sql, bool $isSuccess)
 {
+    // SELECT文の場合は実行しない
+    if (str_contains($sql, "SELECT"))
+        return;
+
+    // sql文の状態を変数に代入
+    $sqlStatus = match (true) {
+        str_contains($sql, "INSERT") => "追加",
+        str_contains($sql, "UPDATE") && str_contains($sql, "deleted_at") => "論理削除",
+        str_contains($sql, "UPDATE") => "更新",
+        default => "その他",
+    };
+
     // セッション開始
     if (!isset($_SESSION))
         session_start();
 
     // 実行結果をセッションに保存
-    $_SESSION["result"] = $isSuccess
-        ? match (true) {
-            // 追加、論理削除、変更、削除に成功した場合
-            preg_match('/^INSERT/', $sql) => "追加に成功しました",
-            preg_match('/^UPDATE.*deleted_at/', $sql) => "論理削除に成功しました",
-            preg_match('/^UPDATE/', $sql) => "変更に成功しました",
-            preg_match('/^DELETE/', $sql) => "削除に成功しました",
-            default => "不明なエラー",
-        }
-        : match (true) {
-            // 追加、論理削除、変更、削除に失敗した場合
-            preg_match('/^INSERT/', $sql) => "追加に失敗しました",
-            preg_match('/^UPDATE.*deleted_at/', $sql) => "論理削除に失敗しました",
-            preg_match('/^UPDATE/', $sql) => "変更に失敗しました",
-            preg_match('/^DELETE/', $sql) => "削除に失敗しました",
-            default => "不明なエラー",
-        };
-    // matchはswitch に似ている
+    $_SESSION["result"] = $isSuccess ? "{$sqlStatus}に成功しました" : "{$sqlStatus}に失敗しました";
 }
 
 /** SQL文を実行し、結果を取得する汎用関数
@@ -71,23 +66,22 @@ function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
         }
 
         // クエリを実行
-        $stmt->execute();
-
-        // 実行結果をセッションに保存
-        saveResultToSession($sql, true);
+        $result = $stmt->execute();
 
         // 結果を取得して返す
         // fetchAll()で全件取得、fetch()で1件取得
-        return $fetchAll
+        $executeQuery = $fetchAll
             ? $stmt->fetchAll(PDO::FETCH_ASSOC)
             : $stmt->fetch(PDO::FETCH_ASSOC);
 
     } catch (PDOException $e) {
-        // 実行結果をセッションに保存
-        saveResultToSession($sql, false);
-
         // エラー情報を返す
-        return ["error" => $e->getMessage()];
+        $executeQuery = ["error" => $e->getMessage()];
+
+    } finally {
+        // 実行結果をセッションに保存
+        saveResultToSession($sql, $result);
+        return $executeQuery;
     }
 }
 
@@ -146,9 +140,18 @@ function getInquiryHTML($id)
             <a id='btn-edit-{$id}' 
             href='./inquiry_edit.php?id={$id}'
             class='btn btn-primary'>編集</a>
-            <a id='btn-delete-{$id}' class='btn btn-danger'>削除</a>
+            <a id='btn-delete-{$id}' 
+            class='btn btn-danger'>削除</a>
         </div>
-    </div>";
+    </div>
+    <!-- btn-deleteのイベントリスナー -->
+    <script>
+        document.getElementById('btn-delete-{$id}').addEventListener('click', () => {
+            if (confirm('本当に削除しますか？')) {
+                location.href = './inquiry_delete.php?id={$id}';
+            }
+        })
+    </script>";
 }
 
 /** すべての問い合わせデータを取得し、HTML形式で返す
@@ -157,8 +160,7 @@ function getInquiryHTML($id)
 function getAllInquiriesHTML($includeSoftDeletedItems = false)
 {
     $sql = "SELECT id FROM inquiry"
-        . (
-            $includeSoftDeletedItems
+        . ($includeSoftDeletedItems
             //  論理削除された問い合わせデータを含める
             ? ""
             // 論理削除された問い合わせデータを含めない
@@ -337,6 +339,7 @@ function trim_all($str)
  * 
  * @param string $date "Y-m-d"形式の日付
  * @return string "yyyy年mm月dd日(曜日(日本語))"形式の日付
+ * @param string $date "Y-m-d"形式の日付
  */
 function JPDate($date)
 {
