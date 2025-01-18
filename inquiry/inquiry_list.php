@@ -1,9 +1,3 @@
-<!-- デバッグ用 -->
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-?>
-<!-- ここまでデバッグ用 -->
 
 <?php
 require_once "..//functions.php";

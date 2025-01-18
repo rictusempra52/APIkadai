@@ -19,7 +19,7 @@ function db_conn()
     }
 }
 
-/** 実行結果をセッションに保存する
+/** 書き込みの実行結果をセッションに保存する
  * @param string $sql 実行したSQL文
  * @param bool $isSuccess 実行結果(true:成功、false:失敗)
  */
