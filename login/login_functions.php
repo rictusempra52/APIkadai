@@ -52,10 +52,13 @@ function login($mail_address, $password)
     $sql = "SELECT * FROM user_table
     WHERE mail_address = :mail_address AND deleted_at IS NULL";
     $bindings = [":mail_address" => [$mail_address, PDO::PARAM_STR]];
-    $result = executeQuery($sql, $bindings);
-    if (!empty($result)) {
-        $record = $result->fetch(PDO::FETCH_ASSOC);
-        return password_verify($password, $record["password"]);
+    // クエリ実行
+    $stmt = executeQuery($sql, $bindings);
+    // 結果を取得
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result) {
+        // ハッシュ化されたパスワードと入力パスワードを比較
+        return password_verify($password, $result["password"]);
     } else {
         return false;
     }

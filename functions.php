@@ -48,8 +48,9 @@ function saveResultToSession(string $sql, bool $isSuccess)
 /** SQL文を実行し、結果を取得する汎用関数
  * @param string $sql 実行するSQL文
  * @param array $bindings プレースホルダーにバインドする値
- * @param bool $fetchAll 結果を全件取得するかどうか
- * @return mixed クエリ実行結果(成功:結果、失敗:エラー情報)
+ * @param bool $fetchAll 結果を全件取得するかどうか (デフォルト: true)
+ * @return mixed クエリ実行結果 (成功時: PDOStatement, 失敗時: PDOException)
+ * @throws PDOException クエリ実行時にエラーが発生した場合
  */
 function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
 {
@@ -68,19 +69,15 @@ function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
         // クエリを実行
         $isSuccess = $stmt->execute();
 
-        // 結果を取得して返す
-        // fetchAll()で全件取得、fetch()で1件取得
-        $result = $fetchAll
-            ? $stmt->fetchAll(PDO::FETCH_ASSOC)
-            : $stmt->fetch(PDO::FETCH_ASSOC);
+        // 実行結果をセッションに保存
+        saveResultToSession($sql, $isSuccess);
+
+        // PDOStatementオブジェクトを返す
+        return $stmt;
 
     } catch (PDOException $e) {
         // エラーを返す
         throw $e;
-    } finally {
-        // 実行結果をセッションに保存
-        saveResultToSession($sql, $isSuccess);
-        return $result;
     }
 }
 
