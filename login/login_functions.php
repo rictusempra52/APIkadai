@@ -29,6 +29,9 @@ function isUserExist($mail_address)
  */
 function registerUser($mail_address, $password)
 {
+    // パスワードをハッシュ化
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    // SQL文
     $sql = "INSERT INTO user_table (mail_address, password, created_at, updated_at)
             VALUES (:mail_address, :password, NOW(), NOW())";
     $bindings = [":mail_address" => [$mail_address, PDO::PARAM_STR], ":password" => [$password, PDO::PARAM_STR]];
@@ -42,8 +45,13 @@ function registerUser($mail_address, $password)
  */
 function login($mail_address, $password)
 {
-    $sql = "SELECT * FROM user_table WHERE mail_address = :mail_address AND password = :password AND deleted_at IS NULL";
-    $bindings = [":mail_address" => [$mail_address, PDO::PARAM_STR], ":password" => [$password, PDO::PARAM_STR]];
+    $sql = "SELECT * FROM user_table WHERE mail_address = :mail_address AND deleted_at IS NULL";
+    $bindings = [":mail_address" => [$mail_address, PDO::PARAM_STR]];
     $result = executeQuery($sql, $bindings);
-    return $result->rowCount() > 0;
+    if ($result->rowCount() > 0) {
+        $record = $result->fetch(PDO::FETCH_ASSOC);
+        return password_verify($password, $record["password"]);
+    } else {
+        return false;
+    }
 }

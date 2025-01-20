@@ -11,10 +11,14 @@ $password = $_POST['password'];
 
 // ユーザー新規登録
 if (isUserExist($email)) {
-    header("Location:./register.php?error=1");
-}else {
+    echo
+        "<script>
+            alert('このメールアドレスは既に登録されています。\\nログイン画面に戻ります。');
+            location.href='./login.php';
+        </script>";
+} else {
     registerUser($email, $password);
+    header("Location:./login.php");
 }
-header("Location:./login.php");
 
 exit;
