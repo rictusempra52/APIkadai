@@ -1,5 +1,5 @@
 <?php
-require_once "../functions.php";
+require_once(__DIR__ . '/../functions.php');
 
 /** ユーザーがすでに存在しているかチェック
  * @param string $mail_address ユーザーのメールアドレス
@@ -56,10 +56,36 @@ function login($mail_address, $password)
     $stmt = executeQuery($sql, $bindings);
     // 結果を取得
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($result) {
-        // ハッシュ化されたパスワードと入力パスワードを比較
-        return password_verify($password, $result["password"]);
+    if ($result && password_verify($password, $result["password"])) {
+        session_start();
+        session_regenerate_id(true);
+        $_SESSION["id"] = session_id();
+        $_SESSION['mail_address'] = $mail_address;
+        $_SESSION['user_type'] = $result['user_type'];
+
+        return true;
     } else {
         return false;
     }
+}
+
+/** ログイン状態をチェック
+ * @return bool true:ログインしている false:ログインしていない
+ */
+function isLogin()
+{
+    session_start();
+    if (// 1. $_SESSION["id"]が存在するかチェック
+        // 2. $_SESSION["id"]が現在のセッションIDと一致するかチェック
+        !isset($_SESSION["id"]) || $_SESSION["id"] !== session_id()
+    ) {
+        // ログインしてない場合
+        return false;
+    } else {
+        // ログインしている場合
+        session_regenerate_id(true);
+        $_SESSION["id"] = session_id();
+        return true;
+    }
+
 }

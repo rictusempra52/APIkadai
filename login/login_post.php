@@ -15,7 +15,7 @@ if (login($mail_address, $password)) {
     echo
         "<script>
             alert('{$mail_address}にてログインしました。');
-            location.href='./inquiry_list.php';
+            location.href='../index.php';
         </script>";
 
 } else {
