@@ -1,4 +1,3 @@
-
 <?php
 require_once "..//functions.php";
 // セッションの開始
@@ -8,7 +7,7 @@ $cardHTML = getAllInquiriesHTML();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
     <meta charset="UTF-8">
@@ -17,12 +16,12 @@ $cardHTML = getAllInquiriesHTML();
         crossorigin="anonymous" />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/header.css" />
-    <title>問い合わせ履歴</title>
+    <title>問い合わせ履歴</title><!--  -->
 </head>
 
 <body>
     <!-- ヘッダー -->
-    <?php require_once "../include/header.php"; ?>
+    <?php require_once "../header.php"; ?>
 
     <div id="main_contents">
         <div id="buttons">

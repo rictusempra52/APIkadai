@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
   <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
 <body>
   <!-- <?php var_dump(getenv("CLOUD_VISION_API_KEY")) ?> -->
 
-  <?php require_once "../include/header.php"; ?>
+  <?php require_once "../header.php"; ?>
   <div id="main">
     <div id="register_area" class="card">
       <h1 class="card-header">提出された書類を撮影</h1>
