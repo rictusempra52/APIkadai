@@ -7,5 +7,10 @@ if (isset($_COOKIE[session_name()])) {
 }
 session_destroy();
 
-header('Location:./login.php');
+echo
+    "<script>
+        alert('ログアウトしました。');
+        location.href='./login.php';
+    </script>";
+
 exit;

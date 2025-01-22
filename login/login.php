@@ -18,10 +18,15 @@
             <div class="mb-3">
                 <label for="mail_address" class="form-label">メールアドレス</label>
                 <input type="mail_address" class="form-control" id="mail_address" name="mail_address" required>
+                <!-- 入力されているかどうかで内容が変更されるdiv -->
+                <div class="input-check"></div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">パスワード</label>
                 <input type="password" class="form-control" id="password" name="password" required>
+                <!-- 入力されているかどうかで内容が変更されるdiv -->
+                <div class="input-check"></div>
+
             </div>
             <div class="button-area">
                 <button type="submit" class="btn btn-primary">ログイン</button>
