@@ -10,7 +10,19 @@ MySQL への接続ができるようになりました。
 
 ## 2025 年 1 月 21 日追記
 
-- ログインとログアウトを実装した！
+- ログイン、ログアウト、ユーザー登録を実装した！
+
+# DEMO
+
+- [デプロイ済みのサイト](https://indigodingo.sakura.ne.jp/apiKadai/)
+  - 開くとまず「ログインしてください」の案内が出て、ログインページに飛びます。
+  - ログアウトの際は、ログイン後に右上のユーザーアイコンをクリックしてください。
+- [GitHub](https://github.com/rictusempra52/APIkadai)
+
+## IDPW
+
+- ID(メールアドレス): r@r
+- PW: edm456
 
 # 工夫した点・こだわった点
 
@@ -78,17 +90,18 @@ $basePath = ($_SERVER['SERVER_NAME'] == 'localhost')
 
 - filezilla で UP した後でも、デプロイされたものを確認しようとする古いファイルが開いてしまう。→ キャッシュ削除 or SuperReload`ctrl+shift+r` で解決した
 - `{"database error":"SQLSTATE[HY000] [2002] No such file or directory"}` のエラーが出る。localhost では問題ない → 未解決
-  ﾁｬｯﾋﾟｰ：https://chatgpt.com/share/67723b87-6614-800b-96c6-604060d1be42
+  [ﾁｬｯﾋﾟｰ](https://chatgpt.com/share/67723b87-6614-800b-96c6-604060d1be42)
   「接続先ホスト名が間違っている場合（例: localhost vs 127.0.0.1）、接続に失敗します。」を試したら、
   今度は`{"database error":"SQLSTATE[HY000] [2002] Connection refused"}`のエラーになった。
-  → ホスト名は localhost でも 127.0.0.1 でも一緒で、いずれも localhost を指すことが分かった。
-  → そもそも mysql の正しいホスト名や id を入れる必要があった。
+- → ホスト名は localhost でも 127.0.0.1 でも一緒で、いずれも localhost を指すことが分かった。
+- → そもそも mysql の正しいホスト名や id を入れる必要があった。
 
 ## 2025 年 1 月 15 日追加
 
 - 「更新された」「追加された」はわかるように `alert` を出したほうが良い。
 - `alert` を出す処理は、`session` を使うとよい。
 
-```
+## 2025 年 1 月 21 日追加
 
-```
+- `login_functions.php` にログイン関係の関数を集約しましたが、`○○_post.php` に個別に書いたほうが楽かも、と思いました。
+- localhost とさくらサーバー上のデータテーブルは、エクスポートした sql ファイルを使うと簡単
