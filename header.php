@@ -1,8 +1,10 @@
 <?php
-$basePath = dirname(__DIR__);
+// localhost かさくらサーバーかを判別して、パスを取得
+$basePath = ($_SERVER['SERVER_NAME'] == 'localhost')
+    ? 'https://localhost/Gsacademy/apiKadai/'
+    : 'https://indigodingo.sakura.ne.jp/apiKadai/';
 
-require_once "$basePath/login/login_functions.php";
-// ユーザーが認証しているかを判別する処理
+require_once __DIR__ . "/login/login_functions.php";// ユーザーが認証しているかを判別する処理
 if (!isLogin()) {
     // 認証していない場合は、ログイン画面へリダイレクト
     echo "
@@ -17,13 +19,13 @@ if (!isLogin()) {
 <header class="header">
 
     <!-- SVGアイコン -->
-    <a href="index.php" class="icon-link">
-        <img src="img/logo.svg" alt="Logo" class="icon" width="20" height="20">
+    <a href="<?= $basePath; ?>index.php" class="icon-link">
+        <img src="<?= $basePath; ?>img/logo.svg" alt="Logo" class="icon" width="20" height="20">
     </a>
     <!-- メニュー -->
     <div class="menu"></div>
     <div class="usericon">
-        <img src="img/usericon.png" alt="">
+        <img src="<?= $basePath; ?>img/usericon.png" alt="">
     </div>
     <!-- firebaseのapikey読み込み -->
     <!-- <script type="module" src="js/apikey.js"></script> -->
@@ -74,7 +76,9 @@ if (!isLogin()) {
     document.querySelector(".usericon")
         .addEventListener("click", () => {
             if (window.confirm("ログアウトしますか？")) {
-                window.location.href = "login/logout.php";
+                window.location.href = "<?= $basePath; ?>login/logout.php";
+            }
+        });
             }
         });
 </script>

@@ -74,7 +74,8 @@ function login($mail_address, $password)
  */
 function isLogin()
 {
-    session_start();
+    if (!isset($_SESSION))
+        session_start();
     if (// 1. $_SESSION["id"]が存在するかチェック
         // 2. $_SESSION["id"]が現在のセッションIDと一致するかチェック
         !isset($_SESSION["id"]) || $_SESSION["id"] !== session_id()

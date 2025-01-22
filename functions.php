@@ -73,7 +73,9 @@ function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
         saveResultToSession($sql, $isSuccess);
 
         // PDOStatementオブジェクトを返す
-        return $stmt;
+        return $fetchAll
+            ? $stmt->fetchAll(PDO::FETCH_ASSOC)
+            : $stmt->fetch(PDO::FETCH_ASSOC);
 
     } catch (PDOException $e) {
         // エラーを返す
@@ -90,11 +92,9 @@ function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
 function getDataFromMySQL($id, $includeSoftDeletedItems = false)
 {
     $sql = "SELECT * FROM inquiry WHERE id = :id"
-        . (
-            $includeSoftDeletedItems
+        . ($includeSoftDeletedItems
             ? ""
-            : " AND deleted_at IS NULL"
-        );
+            : " AND deleted_at IS NULL");
     $bindings = [':id' => [$id, PDO::PARAM_INT]];
     $record = executeQuery($sql, $bindings, false);
 

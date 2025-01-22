@@ -27,7 +27,7 @@ if (!empty($_GET['id'])) {
 
 <body>
     <!-- ヘッダー -->
-    <?php require_once "../include/header.php"; ?>
+    <?php require_once "../header.php"; ?>
     <!-- メインコンテンツ -->
     <div id="main_contents">
         <form action="./inquiry_post_edit.php" method="POST">
