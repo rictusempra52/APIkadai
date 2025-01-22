@@ -18,6 +18,11 @@ if (isUserExist($mail_address)) {
         </script>";
 } else {
     registerUser($mail_address, $password);
+    echo
+        "<script>
+            alert('新規登録が完了しました。\\nログイン画面に戻ります。');
+            location.href='./login.php';
+        </script>";
     header("Location:./login.php");
 }
 
