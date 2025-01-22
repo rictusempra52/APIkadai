@@ -16,8 +16,8 @@
         <h1 class="card-header">新規登録</h1>
         <form action="user_register_post.php" method="POST">
             <div class="mb-3">
-                <label for="email" class="form-label">メールアドレス</label>
-                <input type="email" class="form-control" name="email" id="email" required>
+                <label for="mail_address" class="form-label">メールアドレス</label>
+                <input type="mail_address" class="form-control" name="mail_address" id="mail_address" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">パスワード</label>
