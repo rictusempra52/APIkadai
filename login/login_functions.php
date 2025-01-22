@@ -49,19 +49,19 @@ function registerUser($mail_address, $password)
  */
 function login($mail_address, $password)
 {
-    $sql = "SELECT * FROM user_table
-    WHERE mail_address = :mail_address AND deleted_at IS NULL";
+    $sql =
+        "SELECT * FROM user_table WHERE mail_address = :mail_address AND deleted_at IS NULL";
     $bindings = [":mail_address" => [$mail_address, PDO::PARAM_STR]];
     // クエリ実行
-    $stmt = executeQuery($sql, $bindings);
+    $stmt = executeQuery($sql, $bindings, false);
+
     // 結果を取得
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($result && password_verify($password, $result["password"])) {
+    if ($stmt && password_verify($password, $stmt["password"])) {
         session_start();
         session_regenerate_id(true);
         $_SESSION["id"] = session_id();
         $_SESSION['mail_address'] = $mail_address;
-        $_SESSION['user_type'] = $result['user_type'];
+        $_SESSION['user_type'] = $stmt['user_type'];
 
         return true;
     } else {

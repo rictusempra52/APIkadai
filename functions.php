@@ -49,8 +49,8 @@ function saveResultToSession(string $sql, bool $isSuccess)
  * @param string $sql 実行するSQL文
  * @param array $bindings プレースホルダーにバインドする値
  * @param bool $fetchAll 結果を全件取得するかどうか (デフォルト: true)
- * @return mixed クエリ実行結果 (成功時: PDOStatement, 失敗時: PDOException)
- * @throws PDOException クエリ実行時にエラーが発生した場合
+ * @return mixed クエリ実行結果 (成功時: array, 失敗時: null)
+ * @throws Exception クエリ実行時にエラーが発生した場合
  */
 function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
 {
@@ -83,7 +83,6 @@ function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
     }
 }
 
-
 /** IDをキーに問い合わせデータを取得する
  * @param int $id 問い合わせデータのID
  * @param bool $includeSoftDeletedItems 削除された問い合わせデータを含めるか (デフォルト：false)
@@ -103,9 +102,7 @@ function getDataFromMySQL($id, $includeSoftDeletedItems = false)
         ? trim_all(urldecode($record['inquiry']))
         : '';
     return $record;
-
 }
-
 
 /**
  * 問い合わせデータをHTML形式で返す

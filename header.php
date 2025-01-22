@@ -81,6 +81,4 @@ if (!isLogin()) {
                 window.location.href = "<?= $basePath; ?>login/logout.php";
             }
         });
-            }
-        });
 </script>

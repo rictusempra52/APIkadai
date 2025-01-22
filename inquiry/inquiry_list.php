@@ -7,7 +7,7 @@ $cardHTML = getAllInquiriesHTML();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
     <meta charset="UTF-8">

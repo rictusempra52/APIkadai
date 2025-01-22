@@ -1,9 +1,17 @@
 <?php
-require_once "./login_functions.php";
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+require_once __DIR__ . "/login_functions.php";
+session_start();
 
 // POSTの値チェック
 if (empty($_POST['mail_address']) || empty($_POST['password']))
-    exit("入力されていない項目があります。");
+    echo "
+        <script>
+            alert('入力されていない項目があります。');
+            location.href='../login.php';
+        </script>";
 
 // POSTの値を変数に代入
 $mail_address = $_POST['mail_address'];
@@ -14,7 +22,7 @@ if (login($mail_address, $password)) {
     // ログイン成功のalert
     echo
         "<script>
-            alert('{$mail_address}にてログインしました。');
+            alert('こんにちは！{$mail_address}にてログインしました。');
             location.href='../index.php';
         </script>";
 
@@ -23,6 +31,6 @@ if (login($mail_address, $password)) {
     echo
         "<script>
             alert('ログインに失敗しました。');
-            location.href='./login.php';
+            location.href='../login.php';
         </script>";
 }
