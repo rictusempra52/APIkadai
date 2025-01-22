@@ -4,7 +4,9 @@ $basePath = ($_SERVER['SERVER_NAME'] == 'localhost')
     ? 'https://localhost/Gsacademy/apiKadai/'
     : 'https://indigodingo.sakura.ne.jp/apiKadai/';
 
-require_once __DIR__ . "/login/login_functions.php";// ユーザーが認証しているかを判別する処理
+require_once __DIR__ . "/login/login_functions.php";
+
+// ユーザーが認証しているかを判別する処理
 if (!isLogin()) {
     // 認証していない場合は、ログイン画面へリダイレクト
     echo "

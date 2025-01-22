@@ -45,7 +45,14 @@ MySQL への接続ができるようになりました。
 ### 2025 年 1 月 21 日追加(ログイン・ログアウト実装課題)
 
 - `header.php`を`require_once`で共通化していましたが、それによりファイルパスの記述方法に問題が生じました。
-  →`dirname(__DIR__)`の記述でやっと解決。chappy の力では解決できませんでした。
+  → やっと解決。PHP では`__DIR__`などを使い、HTML では`$bathPath` を使いました。何が違うのかよくわからない
+  [chappy](https://chatgpt.com/share/67907df8-b090-800b-904a-ad1136136b1d)
+
+```
+$basePath = ($_SERVER['SERVER_NAME'] == 'localhost')
+    ? 'https://localhost/Gsacademy/apiKadai/'
+    : 'https://indigodingo.sakura.ne.jp/apiKadai/';
+```
 
 ## 追加したい機能
 
@@ -63,21 +70,25 @@ MySQL への接続ができるようになりました。
 
 # 備考（感想、シェアしたいこと等なんでも）
 
-- vscode のショートカットキーを意識して覚えるようにしました。  
+- vscode のショートカットキーを意識して覚えるようにしました。
   Alt+上下でカーソルのある行をそのまま上下に移動 https://qiita.com/12345/items/64f4372fbca041e949d0
 - `require_once` を使うと、header や footer ,function をサイト内で共通化できる！
 
 ## デプロイ時に困ったことメモ
 
 - filezilla で UP した後でも、デプロイされたものを確認しようとする古いファイルが開いてしまう。→ キャッシュ削除 or SuperReload`ctrl+shift+r` で解決した
-- `{"database error":"SQLSTATE[HY000] [2002] No such file or directory"}` のエラーが出る。localhost では問題ない → 未解決  
-   ﾁｬｯﾋﾟｰ：https://chatgpt.com/share/67723b87-6614-800b-96c6-604060d1be42
+- `{"database error":"SQLSTATE[HY000] [2002] No such file or directory"}` のエラーが出る。localhost では問題ない → 未解決
+  ﾁｬｯﾋﾟｰ：https://chatgpt.com/share/67723b87-6614-800b-96c6-604060d1be42
   「接続先ホスト名が間違っている場合（例: localhost vs 127.0.0.1）、接続に失敗します。」を試したら、
   今度は`{"database error":"SQLSTATE[HY000] [2002] Connection refused"}`のエラーになった。
-  → ホスト名は localhost でも 127.0.0.1 でも一緒で、いずれも localhost を指すことが分かった。  
+  → ホスト名は localhost でも 127.0.0.1 でも一緒で、いずれも localhost を指すことが分かった。
   → そもそも mysql の正しいホスト名や id を入れる必要があった。
 
 ## 2025 年 1 月 15 日追加
 
 - 「更新された」「追加された」はわかるように `alert` を出したほうが良い。
 - `alert` を出す処理は、`session` を使うとよい。
+
+```
+
+```
