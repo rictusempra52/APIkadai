@@ -24,12 +24,12 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_table`
+-- Table structure for table `users`
 --
 
-CREATE TABLE `user_table` (
+CREATE TABLE `users` (
   `id` int(12) NOT NULL,
-  `mail_address` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL,
   `user_type` int(1) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -38,10 +38,10 @@ CREATE TABLE `user_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
--- Dumping data for table `user_table`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `user_table` (`id`, `mail_address`, `password`, `user_type`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `users` (`id`, `email`, `password`, `user_type`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'rictusempra52@gmail.com', 'lssm4833', 0, '2025-01-20 14:56:05', '2025-01-20 14:56:05', NULL),
 (2, 'r@r', '$2y$10$pICqHJekQjtwRy3RQ0cSqOvhhrprL9wGnhMQ5VZolH7F2mzAb5TAC', 0, '2025-01-20 23:40:11', '2025-01-20 23:40:11', NULL);
 
@@ -50,9 +50,9 @@ INSERT INTO `user_table` (`id`, `mail_address`, `password`, `user_type`, `create
 --
 
 --
--- Indexes for table `user_table`
+-- Indexes for table `users`
 --
-ALTER TABLE `user_table`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -60,9 +60,9 @@ ALTER TABLE `user_table`
 --
 
 --
--- AUTO_INCREMENT for table `user_table`
+-- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `user_table`
+ALTER TABLE `users`
   MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 

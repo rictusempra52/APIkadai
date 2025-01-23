@@ -2,16 +2,16 @@
 require_once(__DIR__ . '/../functions.php');
 
 /** ユーザーがすでに存在しているかチェック
- * @param string $mail_address ユーザーのメールアドレス
+ * @param string $email ユーザーのメールアドレス
  * @return bool true:存在している false:存在していない
  */
-function isUserExist($mail_address)
+function isUserExist($email)
 {
     // SQL文を準備
     // メールアドレスが存在するかを確認するSQL文
     // deleted_at IS NULLは論理削除されたユーザーを除く
-    $sql = "SELECT * FROM user_table WHERE mail_address = :mail_address AND deleted_at IS NULL";
-    $bindings = [":mail_address" => [$mail_address, PDO::PARAM_STR]];
+    $sql = "SELECT * FROM users WHERE email = :email AND deleted_at IS NULL";
+    $bindings = [":email" => [$email, PDO::PARAM_STR]];
     $result = executeQuery($sql, $bindings);
     if ($result instanceof PDOException) {
         // エラー処理
@@ -23,35 +23,35 @@ function isUserExist($mail_address)
 }
 
 /** ユーザー新規登録
- * @param string $mail_address ユーザーのメールアドレス
+ * @param string $email ユーザーのメールアドレス
  * @param string $password ユーザーのパスワード
  * @return mixed 
  */
-function registerUser($mail_address, $password)
+function registerUser($email, $password)
 {
     // パスワードをハッシュ化
     $password = password_hash($password, PASSWORD_DEFAULT);
     // SQL文
-    $sql = "INSERT INTO `user_table` 
-    (`id`, `mail_address`, `password`, `user_type`, `created_at`, `updated_at`, `deleted_at`) 
-    VALUES (NULL, :mail_address, :password, '0', NOW(), NOW(), NULL)";
+    $sql = "INSERT INTO `users` 
+    (`id`, `email`, `password`, `user_type`, `created_at`, `updated_at`, `deleted_at`) 
+    VALUES (NULL, :email, :password, '0', NOW(), NOW(), NULL)";
     $bindings = [
-        ":mail_address" => [$mail_address, PDO::PARAM_STR],
+        ":email" => [$email, PDO::PARAM_STR],
         ":password" => [$password, PDO::PARAM_STR]
     ];
     return executeQuery($sql, $bindings);
 }
 
 /** ログイン
- * @param string $mail_address ユーザーのメールアドレス
+ * @param string $email ユーザーのメールアドレス
  * @param string $password ユーザーのパスワード
  * @return bool true:ログイン成功 false:ログイン失敗
  */
-function login($mail_address, $password)
+function login($email, $password)
 {
     $sql =
-        "SELECT * FROM user_table WHERE mail_address = :mail_address AND deleted_at IS NULL";
-    $bindings = [":mail_address" => [$mail_address, PDO::PARAM_STR]];
+        "SELECT * FROM users WHERE email = :email AND deleted_at IS NULL";
+    $bindings = [":email" => [$email, PDO::PARAM_STR]];
     // クエリ実行
     $stmt = executeQuery($sql, $bindings, false);
 
@@ -60,7 +60,7 @@ function login($mail_address, $password)
         session_start();
         session_regenerate_id(true);
         $_SESSION["id"] = session_id();
-        $_SESSION['mail_address'] = $mail_address;
+        $_SESSION['email'] = $email;
         $_SESSION['user_type'] = $stmt['user_type'];
 
         return true;

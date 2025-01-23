@@ -3,10 +3,10 @@
 ```mermaid
 erDiagram
 
-user_table ||--o{ inquiries : "作成する"
-user_table }|--|| user_type : "必ずタイプを持つ"
+users ||--o{ inquiries : "作成する"
+users }|--|| user_type : "必ずタイプを持つ"
 
-user_table {
+users {
     int id PK
     string email
     string  password

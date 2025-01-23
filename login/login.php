@@ -16,8 +16,8 @@
         <h1 class="card-header">ログイン</h1>
         <form action="./login_post.php" method="POST">
             <div class="mb-3">
-                <label for="mail_address" class="form-label">メールアドレス</label>
-                <input type="mail_address" class="form-control" id="mail_address" name="mail_address" required>
+                <label for="email" class="form-label">メールアドレス</label>
+                <input type="email" class="form-control" id="email" name="email" required>
                 <!-- 入力されているかどうかで内容が変更されるdiv -->
                 <div class="input-check"></div>
             </div>

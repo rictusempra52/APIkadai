@@ -6,7 +6,7 @@ require_once __DIR__ . "/login_functions.php";
 session_start();
 
 // POSTの値チェック
-if (empty($_POST['mail_address']) || empty($_POST['password']))
+if (empty($_POST['email']) || empty($_POST['password']))
     echo "
         <script>
             alert('入力されていない項目があります。');
@@ -14,15 +14,15 @@ if (empty($_POST['mail_address']) || empty($_POST['password']))
         </script>";
 
 // POSTの値を変数に代入
-$mail_address = $_POST['mail_address'];
+$email = $_POST['email'];
 $password = $_POST['password'];
 
 // ログイン
-if (login($mail_address, $password)) {
+if (login($email, $password)) {
     // ログイン成功のalert
     echo
         "<script>
-            alert('こんにちは！{$mail_address}にてログインしました。');
+            alert('こんにちは！{$email}にてログインしました。');
             location.href='../index.php';
         </script>";
 
