@@ -3,33 +3,35 @@
 ```mermaid
 erDiagram
 
-users ||--o{ inquiries : "作成する"
-users }|--|| user_type : "必ずタイプを持つ"
+users ||--o{ inquiries : "投稿する"
+users ||--o{ user_type_master : "ユーザー種別"
 
 users {
     int id PK
     string email
     string  password
-    int user_type FK
+    int user_type
+    string building_id FK
+    string room_id FK
     datetime created_at
     datetime updated_at
     datetime deleted_at
-}
-
-user_type {
-    int user_type PK
-    string name
-    string description
 }
 
 inquiries {
     int id PK
     int user_id FK
-    string room_no
     string inquiry
+    int status
     datetime deadline
+    datetime finished_at
     datetime created_at
     datetime updated_at
     datetime deleted_at
+}
+
+user_type_master {
+    int id PK
+    string name
 }
 ```

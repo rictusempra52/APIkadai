@@ -97,9 +97,8 @@ function getDataFromMySQL($id, $includeSoftDeletedItems = false)
     $bindings = [':id' => [$id, PDO::PARAM_INT]];
     $record = executeQuery($sql, $bindings, false);
 
-    // inquiryはURLエンコードされているので、decodeする
     $record['inquiry'] = isset($record['inquiry'])
-        ? trim_all(urldecode($record['inquiry']))
+        ? trim_all($record['inquiry'])
         : '';
     return $record;
 }

@@ -4,7 +4,7 @@ require_once "..//functions.php";
 // 変数定義 idはPOSTできる(=問い合わせデータ編集の)時だけ代入し、そうでなければnullにしておく
 $id = $_POST['id'] ?? null;
 $roomNo = trim($_POST["room_no"]);
-$inquiry = urlencode(trim($_POST["inquiry"])); // urlencodeを使うことで、改行を無視
+$inquiry = trim($_POST["inquiry"]);
 $deadline = $_POST["deadline"];
 
 // 入力チェック
