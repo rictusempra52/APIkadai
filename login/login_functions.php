@@ -25,19 +25,31 @@ function isUserExist($email)
 /** ユーザー新規登録
  * @param string $email ユーザーのメールアドレス
  * @param string $password ユーザーのパスワード
+ * @param integer $user_type ユーザーの種類 (0:管理者 1:居住者　2:管理会社)
  * @return mixed 
  */
-function registerUser($email, $password)
-{
+function registerUser
+(
+    $email,
+    $password,
+    $user_type = 0,
+    $building_id = null,
+    $room_id = null
+) {
     // パスワードをハッシュ化
     $password = password_hash($password, PASSWORD_DEFAULT);
     // SQL文
     $sql = "INSERT INTO `users` 
-    (`id`, `email`, `password`, `user_type`, `created_at`, `updated_at`, `deleted_at`) 
-    VALUES (NULL, :email, :password, '0', NOW(), NOW(), NULL)";
+    (`id`, `email`, `password`, `user_type`,`building_id`, `room_id`, `created_at`, `updated_at`, `deleted_at`) 
+    VALUES 
+    (NULL, :email, :password, :user_type, :building_id, :room_id, NOW(), NOW(), NULL);";
+
     $bindings = [
         ":email" => [$email, PDO::PARAM_STR],
-        ":password" => [$password, PDO::PARAM_STR]
+        ":password" => [$password, PDO::PARAM_STR],
+        ":user_type" => [$user_type, PDO::PARAM_INT],
+        ":building_id" => [$building_id, PDO::PARAM_INT],
+        ":room_id" => [$room_id, PDO::PARAM_INT]
     ];
     return executeQuery($sql, $bindings);
 }
@@ -62,6 +74,8 @@ function login($email, $password)
         $_SESSION["id"] = session_id();
         $_SESSION['email'] = $email;
         $_SESSION['user_type'] = $stmt['user_type'];
+        $_SESSION['building_id'] = $stmt['building_id'];
+        $_SESSION['room_id'] = $stmt['room_id'];
 
         return true;
     } else {
