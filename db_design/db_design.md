@@ -11,11 +11,16 @@ users {
     string email
     string  password
     int user_type
-    string building_id FK
     string room_id FK
     datetime created_at
     datetime updated_at
     datetime deleted_at
+}
+
+rooms {
+    int id PK
+    string room_no
+    string building_id FK
 }
 
 inquiries {

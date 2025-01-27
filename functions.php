@@ -117,6 +117,7 @@ function getInquiryHTML($id)
     }
 
     $record['inquiry'] = urldecode($record['inquiry']);
+
     // 登録日時と対応期限を日本語日付形式に変換
     $record['created_at'] = JPDate($record['created_at']);
     $record['deadline'] = JPDate($record['deadline']);
