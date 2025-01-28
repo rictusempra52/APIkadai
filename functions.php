@@ -124,7 +124,7 @@ function getInquiryHTML($id)
 
     return "
     <div class='card mb-3'>
-        <div class='card-header'>{$record['room_no']}</div>
+        <div class='card-header'>{$record['room_id']}</div>
         <div class='card-body'>
             <h6 class='card-subtitle mb-2 text-muted'>
                 登録日時:{$record['created_at']} <br> 対応期限:{$record['deadline']}
@@ -171,21 +171,21 @@ function getAllInquiriesHTML($includeSoftDeletedItems = false)
 
 /**
  * 新しい問い合わせデータを追加する
- * @param string $room_no 部屋番号
+ * @param string $room_id 部屋番号
  * @param string $inquiry 問い合わせ内容
  * @param string $deadline 締切日
  */
-function addDatatoMySQL($room_no, $inquiry, $deadline)
+function addDatatoMySQL($room_id, $inquiry, $deadline)
 {
     // トリム処理を実施
-    $room_no = trim($room_no);
+    $room_id = trim($room_id);
     $inquiry = trim($inquiry);
     $deadline = trim($deadline);
     // SQL文
-    $sql = "INSERT INTO inquiry (room_no, inquiry, deadline, created_at, updated_at)
-            VALUES (:room_no, :inquiry, :deadline, NOW(), NOW())";
+    $sql = "INSERT INTO inquiry (room_id, inquiry, deadline, created_at, updated_at)
+            VALUES (:room_id, :inquiry, :deadline, NOW(), NOW())";
     $bindings = [
-        ":room_no" => [$room_no, PDO::PARAM_STR],
+        ":room_id" => [$room_id, PDO::PARAM_STR],
         ":inquiry" => [$inquiry, PDO::PARAM_STR],
         ":deadline" => [$deadline, PDO::PARAM_STR],
     ];
@@ -195,15 +195,15 @@ function addDatatoMySQL($room_no, $inquiry, $deadline)
 
 /** 問い合わせデータを更新または追加する
  * @param int|null $id 更新するデータのID（新規追加の場合はnull）
- * @param string|null $room_no 部屋番号
+ * @param string|null $room_id 部屋番号
  * @param string|null $inquiry 問い合わせ内容
  * @param string|null $deadline 締切日
  */
-function updateDatatoMySQL($id = null, $room_no = null, $inquiry = null, $deadline = null)
+function updateDatatoMySQL($id = null, $room_id = null, $inquiry = null, $deadline = null)
 {
     // idが指定されていない場合は新規追加
     if (!$id) {
-        addDatatoMySQL($room_no, $inquiry, $deadline);
+        addDatatoMySQL($room_id, $inquiry, $deadline);
         return;
     }
 
@@ -212,10 +212,10 @@ function updateDatatoMySQL($id = null, $room_no = null, $inquiry = null, $deadli
     $bindings = [":id" => [$id, PDO::PARAM_INT]];
 
     // 各項目が空でないかつnullでない場合、トリム処理を適用してセット句に追加
-    if (!empty($room_no)) {
-        $room_no = trim($room_no);
-        $setClauses[] = "room_no = :room_no";
-        $bindings[":room_no"] = [$room_no, PDO::PARAM_STR];
+    if (!empty($room_id)) {
+        $room_id = trim($room_id);
+        $setClauses[] = "room_id = :room_id";
+        $bindings[":room_id"] = [$room_id, PDO::PARAM_STR];
     }
     if (!empty($inquiry)) {
         $inquiry = trim($inquiry);

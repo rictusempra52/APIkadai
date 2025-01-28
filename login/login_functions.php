@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../functions.php');
+require_once __DIR__ . '/../functions.php';
 
 /** ユーザーがすでに存在しているかチェック
  * @param string $email ユーザーのメールアドレス
@@ -33,8 +33,6 @@ function registerUser
     $email,
     $password,
     $user_type = 0,
-    $building_id = null,
-    $room_id = null
 ) {
     // パスワードをハッシュ化
     $password = password_hash($password, PASSWORD_DEFAULT);

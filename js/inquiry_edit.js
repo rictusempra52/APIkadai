@@ -1,5 +1,5 @@
 // DOM
-const room_no = document.getElementById("room_no");
+const room_id = document.getElementById("room_id");
 const inquiry = document.getElementById("inquiry");
 const deadline = document.getElementById("deadline");
 const button1 = document.getElementById("button1");
@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setMinimumDate();
     enableButton1();
 });
-// room_no, inquiry, deadlineの内容が変更されたとき
+// room_id, inquiry, deadlineの内容が変更されたとき
 // button1の有効/無効を切り替え
-room_no.addEventListener("input", enableButton1);
+room_id.addEventListener("input", enableButton1);
 inquiry.addEventListener("input", enableButton1);
 deadline.addEventListener("input", enableButton1);
 
@@ -28,7 +28,7 @@ function setMinimumDate() {
 // button1の有効・無効を切り替える関数
 function enableButton1() {
     // 必要な入力フィールドを配列に格納
-    const fields = [room_no, inquiry, deadline];
+    const fields = [room_id, inquiry, deadline];
     // いずれかのフィールドが空の場合、ボタンを無効化
     button1.disabled = fields.some(field => !field.value);
 }

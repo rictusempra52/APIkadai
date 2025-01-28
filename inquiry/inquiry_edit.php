@@ -8,7 +8,7 @@ if (!empty($_GET['id'])) {
     $mySQLdata = getDatafromMySQL($id);
 } else {
     // GETできない場合は空の配列を格納
-    $mySQLdata = ['id' => '', 'room_no' => '', 'inquiry' => '', 'deadline' => ''];
+    $mySQLdata = ['id' => '', 'room_id' => '', 'inquiry' => '', 'deadline' => ''];
 }
 ?>
 
@@ -37,9 +37,9 @@ if (!empty($_GET['id'])) {
                 <!-- 入力フォーム -->
                 <div id="inquiry_form" class="card-body">
                     <!-- 部屋番号 -->
-                    <label for="room_no">部屋番号</label>
-                    <input type="text" id="room_no" name="room_no" class="form-control"
-                        value="<?= $mySQLdata['room_no'] ?>" required />
+                    <label for="room_id">部屋番号</label>
+                    <input type="text" id="room_id" name="room_id" class="form-control"
+                        value="<?= $mySQLdata['room_id'] ?>" required />
                     <!-- 入力されているかどうかで内容が変更されるdiv -->
                     <div class="input-check"></div>
                     <!-- 問い合わせ内容 -->
