@@ -4,6 +4,41 @@ require_once "..//functions.php";
 session_start();
 // データまとめ用の変数
 $cardHTML = getAllInquiriesHTML();
+
+/** 問い合わせデータの総数を部屋ごとに取得し、HTMLに出力する関数
+ * @return string 問い合わせデータの総数を部屋番号ごとに記載したcard
+ */
+function getInquiryAmount()
+{
+
+    // 部屋ごとの問い合わせデータの総数を取得
+    $sql =
+        "SELECT
+            r.room_no,
+            COUNT(i.id) AS inquiry_count
+        FROM
+            rooms r
+        LEFT OUTER JOIN
+            inquiry i ON r.id = i.room_id
+        GROUP BY
+            r.room_no;";
+    $records = executeQuery($sql, []);
+
+    // 部屋ごとの問い合わせデータの総数を表にしてHTMLに出力
+    $output = '';
+    foreach ($records as $record) {
+        $output .= "
+            <tr>
+                <td>{$record['room_no']}:</td>
+            </tr>
+            <tr>
+                <td>{$record['inquiry_count']}件</td>
+            </tr>
+        ";
+    }
+    return $output;
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +66,13 @@ $cardHTML = getAllInquiriesHTML();
         </div>
         <div id="task_list" class="card">
             <h1 class="card-header">問い合わせ履歴</h1>
-            <div class="card-body"> <?= $cardHTML ?> </div>
+            <div class="card-body">
+                <div class="card" id="task_amount">
+                    <!-- 部屋番号ごとのinquiry数 -->
+                    <?= getInquiryAmount() ?>
+                </div>
+                <?= $cardHTML ?>
+            </div>
         </div>
     </div>
     <footer></footer>

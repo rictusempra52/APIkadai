@@ -26,7 +26,8 @@ user_rooms {
 
 rooms {
     int id PK
-    string room_id
+    string room_no
+    int building_id
     string building_id FK
 }
 

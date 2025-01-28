@@ -78,8 +78,8 @@ function executeQuery(string $sql, array $bindings = [], bool $fetchAll = true)
             : $stmt->fetch(PDO::FETCH_ASSOC);
 
     } catch (PDOException $e) {
-        // エラーを返す
-        throw $e;
+        // エラーメッセージを返す
+        return "SQLエラー: " . $e->getMessage();
     }
 }
 
@@ -117,6 +117,8 @@ function getInquiryHTML($id)
     }
 
     $record['inquiry'] = urldecode($record['inquiry']);
+    // room_noを取得
+    $room_no = getRoomNo($record['room_id']);
 
     // 登録日時と対応期限を日本語日付形式に変換
     $record['created_at'] = JPDate($record['created_at']);
@@ -124,7 +126,7 @@ function getInquiryHTML($id)
 
     return "
     <div class='card mb-3'>
-        <div class='card-header'>{$record['room_id']}</div>
+        <div class='card-header'>{$room_no}</div>
         <div class='card-body'>
             <h6 class='card-subtitle mb-2 text-muted'>
                 登録日時:{$record['created_at']} <br> 対応期限:{$record['deadline']}
@@ -317,6 +319,17 @@ function getCloudVision($imagePath)
     $responseData = json_decode($response, true);
 
     return $responseData;
+}
+
+/** room_idからroom_noを取得する
+ * @param integer $room_id 部屋id
+ * @return string room_no 部屋番号
+ */
+function getRoomNo($room_id)
+{
+    $sql = "SELECT room_no FROM rooms WHERE id = :room_id";
+    $bindings = [":room_id" => [$room_id, PDO::PARAM_INT]];
+    return executeQuery($sql, $bindings, false)['room_no'];
 }
 
 // 文字列修正などこまごました関数
