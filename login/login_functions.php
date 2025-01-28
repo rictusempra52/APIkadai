@@ -40,16 +40,14 @@ function registerUser
     $password = password_hash($password, PASSWORD_DEFAULT);
     // SQL文
     $sql = "INSERT INTO `users` 
-    (`id`, `email`, `password`, `user_type`,`building_id`, `room_id`, `created_at`, `updated_at`, `deleted_at`) 
+    (`id`, `email`, `password`, `user_type`, `created_at`, `updated_at`, `deleted_at`) 
     VALUES 
-    (NULL, :email, :password, :user_type, :building_id, :room_id, NOW(), NOW(), NULL);";
+    (NULL, :email, :password, :user_type, NOW(), NOW(), NULL);";
 
     $bindings = [
         ":email" => [$email, PDO::PARAM_STR],
         ":password" => [$password, PDO::PARAM_STR],
-        ":user_type" => [$user_type, PDO::PARAM_INT],
-        ":building_id" => [$building_id, PDO::PARAM_INT],
-        ":room_id" => [$room_id, PDO::PARAM_INT]
+        ":user_type" => [$user_type, PDO::PARAM_INT]
     ];
     return executeQuery($sql, $bindings);
 }
